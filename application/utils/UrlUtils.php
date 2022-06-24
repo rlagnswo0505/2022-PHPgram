@@ -1,5 +1,7 @@
 <?php
-
+    function getParam($key){
+      return isset($_GET['email']) ? $_GET['email'] : "";
+    }
     function getUrl() {
         return isset($_GET['url']) ? rtrim($_GET['url'], '/') : "";
     }
