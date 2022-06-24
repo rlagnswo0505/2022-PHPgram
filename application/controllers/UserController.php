@@ -3,7 +3,28 @@ namespace application\controllers;
 
 class UserController extends Controller {
     public function signin() {        
-        return "user/signin.php";
+        switch(getMethod()){
+            case _GET:
+                return "user/signin.php";
+            case _POST:
+                $param = [
+                    'email' => $_POST['email'],
+                    'pw' => $_POST['pw'],
+                ];
+
+                $dbUser = $this->model->selUser($param);
+                if ($dbUser === false) {
+                    print '아이디 다름 <br>';
+                    return "redirect: signin";
+                } elseif (!password_verify($param['pw'], $dbUser->pw)) {
+                    print '비밀번호 다름 <br>';
+                    return "redirect: signin";
+                }
+                session_start();
+                $_SESSION[_LOGINUSER] = $dbUser;
+                
+                return "redirect:/feed/index";
+        }
     }
 
     public function signup() {
@@ -16,7 +37,7 @@ class UserController extends Controller {
                     'pw' => $_POST["pw"],
                     'nm' => $_POST["nm"],
                 ];
-                $param['upw'] = password_hash($param['upw'], PASSWORD_BCRYPT);
+                $param['pw'] = password_hash($param['pw'], PASSWORD_BCRYPT);
                 $this->model->insUser($param);
                 return "redirect:signin";
         }
