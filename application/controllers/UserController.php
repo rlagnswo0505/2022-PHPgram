@@ -43,4 +43,8 @@ class UserController extends Controller {
                 return "redirect:signin";
         }
     }
+    public function logout() {
+      $this->flash(_LOGINUSER);
+      return "redirect:signin";
+    }
 }
