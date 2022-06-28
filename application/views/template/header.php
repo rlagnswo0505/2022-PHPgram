@@ -53,7 +53,7 @@
       </div>
     </div>
     <form action="" class="d-none">
-      <input type="file" name="imgs" accept="image/*" multiple id="">
+      <input type="file" class="inputFile" name="imgs" accept="image/*" multiple id="">
     </form>
   </div>
 </div>
