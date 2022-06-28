@@ -42,6 +42,7 @@ class FeedController extends Controller
                 ];
 
                 $ifeed = $this->model->insFeed($param);
+                $paramImg = ["ifeed" => $ifeed];
 
                 foreach ($_FILES["imgs"]["name"] as $key => $orginFileNm) {
                     $saveDirectory = _IMG_PATH . "/feed/" . $ifeed;
@@ -51,10 +52,7 @@ class FeedController extends Controller
                     $tempName = $_FILES["imgs"]["tmp_name"][$key];
                     $randomFileNm = getRandomFileNm($orginFileNm);
                     if(move_uploaded_file($tempName, $saveDirectory . "/" . $randomFileNm)){
-                      $paramImg = [
-                        "ifeed" => $ifeed,
-                        "img" => $randomFileNm,
-                      ];
+                      $paramImg["img"] = $randomFileNm;
                       $ifeedImg = $this->model->insFeedImg($paramImg);
                     }
                 }
