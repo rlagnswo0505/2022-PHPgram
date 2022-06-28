@@ -51,11 +51,11 @@ class FeedController extends Controller
                     $tempName = $_FILES["imgs"]["tmp_name"][$key];
                     $randomFileNm = getRandomFileNm($orginFileNm);
                     if(move_uploaded_file($tempName, $saveDirectory . "/" . $randomFileNm)){
-                      $param = [
+                      $paramImg = [
                         "ifeed" => $ifeed,
                         "img" => $randomFileNm,
                       ];
-                      $ifeedImg = $this->model->insFeedImg($param);
+                      $ifeedImg = $this->model->insFeedImg($paramImg);
                     }
                 }
 
