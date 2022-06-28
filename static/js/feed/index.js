@@ -4,6 +4,7 @@
     const modal = document.querySelector('#newFeedModal');
     const body = modal.querySelector('#id-modal-body');
     const frmElem = modal.querySelector('form');
+    const closeBtn = modal.querySelector('.btn-close');
 
     //이미지 값이 변하면
     frmElem.imgs.addEventListener('change', function (e) {
@@ -30,7 +31,6 @@
         reader.onload = function () {
           imgElem.src = reader.result;
         };
-        const closeBtn = modal.querySelector('.btn-close');
         closeBtn.addEventListener('click', () => {
           frmElem.reset();
         });
@@ -56,12 +56,9 @@
             .then((res) => res.json())
             .then((myJson) => {
               console.log(myJson);
-              // const closeBtn = modal.querySelector('.btn-close');
-              // closeBtn.click();
-
-              // if (feedObj && myJson.result) {
-              //   feedObj.refreshList();
-              // }
+              if (myJson.result) {
+                closeBtn.click();
+              }
             });
         });
       }

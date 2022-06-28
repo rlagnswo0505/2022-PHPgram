@@ -59,7 +59,7 @@ class FeedController extends Controller
                     }
                 }
 
-                // return ["result" => $ifeed];
+                return ["result" => 1];
         }
     }
 }
