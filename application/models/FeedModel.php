@@ -20,4 +20,17 @@ class FeedModel extends Model
         $stmt->execute();
         return intval($this->pdo->lastInsertId());
     }
+
+    public function insFeedImg(&$param){
+      $sql = "INSERT INTO t_feed_img
+        (ifeed, img)
+        VALUES
+        (:ifeed, :img)";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(":ifeed", $param["ifeed"]);
+        $stmt->bindValue(":img", $param["img"]);
+        $stmt->execute();
+        // 디비에서 영향을 미친 레코드 수
+        return $stmt->rowCount();
+    }
 }

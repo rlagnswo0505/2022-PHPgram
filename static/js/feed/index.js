@@ -30,6 +30,13 @@
         reader.onload = function () {
           imgElem.src = reader.result;
         };
+        const closeBtn = modal.querySelector('.btn-close');
+        closeBtn.addEventListener('click', () => {
+          frmElem.reset();
+        });
+        modal.addEventListener('click', () => {
+          frmElem.reset();
+        });
 
         const shareBtnElem = body.querySelector('button');
         shareBtnElem.addEventListener('click', function () {
