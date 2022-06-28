@@ -28,12 +28,17 @@
         const imgElem = body.querySelector('#id-img');
 
         const imgSource = e.target.files[0];
+        // 컴퓨터 파일을 읽어올 수 있게 객체를 만듦
         const reader = new FileReader();
+        // 파일을 읽음
         reader.readAsDataURL(imgSource);
+        // 성공적으로 읽었다면 실행
         reader.onload = function () {
+          // 파일의 컨텐츠
           imgElem.src = reader.result;
         };
 
+        // 공유하기
         const shareBtnElem = body.querySelector('button');
         shareBtnElem.addEventListener('click', function () {
           const files = frmElem.imgs.files;
