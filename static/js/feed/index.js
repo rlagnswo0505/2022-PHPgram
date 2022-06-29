@@ -4,10 +4,10 @@
     const modal = document.querySelector('#newFeedModal');
     const body = modal.querySelector('#id-modal-body');
     const frmElem = modal.querySelector('form');
-    const closeBtn = modal.querySelector('.btn-close');
-
+    const btnClose = modal.querySelector('.btn-close');
     //이미지 값이 변하면
     frmElem.imgs.addEventListener('change', function (e) {
+      console.log(`length: ${e.target.files.length}`);
       if (e.target.files.length > 0) {
         body.innerHTML = `
                   <div>
@@ -31,13 +31,12 @@
         reader.onload = function () {
           imgElem.src = reader.result;
         };
-        // closeBtn.addEventListener('click', () => {
-        //   frmElem.reset();
-        // });
-        // modal.addEventListener('click', () => {
-        //   frmElem.reset();
-        // });
-
+        btnClose.addEventListener('click', () => {
+          frmElem.reset();
+        });
+        modal.addEventListener('click', () => {
+          frmElem.reset();
+        });
         const shareBtnElem = body.querySelector('button');
         shareBtnElem.addEventListener('click', function () {
           const files = frmElem.imgs.files;
@@ -56,8 +55,9 @@
             .then((res) => res.json())
             .then((myJson) => {
               console.log(myJson);
+
               if (myJson.result) {
-                closeBtn.click();
+                btnClose.click();
               }
             });
         });
@@ -76,4 +76,69 @@
       body.appendChild(selFromComBtn);
     });
   }
+
+  const feedObj = {
+    limit: 20,
+    itemLength: 0,
+    currentPage: 1,
+    loadingElem: document.querySelector('.loading'),
+    containerElem: document.querySelector('#item_container'),
+    getFeedList: function () {
+      this.showLoading();
+      const param = {
+        page: this.currentPage++,
+      };
+      fetch('/feed/rest' + encodeQueryString(param))
+        .then((res) => res.json())
+        .then((list) => {
+          this.makeFeedList(list);
+        })
+        .catch((e) => {
+          console.error(e);
+          this.hideLoading();
+        });
+    },
+    makeFeedList: function (list) {
+      if (list.length !== 0) {
+        list.forEach((item) => {
+          const divItem = this.makeFeedItem(item);
+          this.containerElem.appendChild(divItem);
+        });
+      }
+      this.hideLoading();
+    },
+    makeFeedItem: function (item) {
+      console.log(item);
+      const divContainer = document.createElement('div');
+      divContainer.className = 'item mt-3 mb-3';
+
+      const divTop = document.createElement('div');
+      divContainer.appendChild(divTop);
+
+      const regDtInfo = getDateTimeInfo(item.regdt);
+      divTop.className = 'd-flex flex-row ps-3 pe-3';
+      const writerImg = `<img src='/static/img/profile/${item.iuser}/${item.mainimg}' 
+              onerror='this.error=null;this.src="/static/img/profile/defaultProfileImg_100.png"'>`;
+
+      divTop.innerHTML = `
+              <div class="d-flex flex-column justify-content-center">${writerImg}</div>
+              <div class="p-3 flex-grow-1">
+                  <div><span class="pointer" onclick="moveToProfile(${item.iuser});">${
+        item.writer
+      }</span> - ${regDtInfo}</div>
+                  <div>${item.location === null ? '' : item.location}</div>
+              </div>
+          `;
+
+      return divContainer;
+    },
+
+    showLoading: function () {
+      this.loadingElem.classList.remove('d-none');
+    },
+    hideLoading: function () {
+      this.loadingElem.classList.add('d-none');
+    },
+  };
+  feedObj.getFeedList();
 })();
