@@ -31,12 +31,12 @@
         reader.onload = function () {
           imgElem.src = reader.result;
         };
-        closeBtn.addEventListener('click', () => {
-          frmElem.reset();
-        });
-        modal.addEventListener('click', () => {
-          frmElem.reset();
-        });
+        // closeBtn.addEventListener('click', () => {
+        //   frmElem.reset();
+        // });
+        // modal.addEventListener('click', () => {
+        //   frmElem.reset();
+        // });
 
         const shareBtnElem = body.querySelector('button');
         shareBtnElem.addEventListener('click', function () {

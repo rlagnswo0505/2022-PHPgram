@@ -42,8 +42,8 @@ class FeedController extends Controller
                 ];
 
                 $ifeed = $this->model->insFeed($param);
-                $paramImg = ["ifeed" => $ifeed];
 
+                $paramImg = [ "ifeed" => $ifeed ];
                 foreach ($_FILES["imgs"]["name"] as $key => $orginFileNm) {
                     $saveDirectory = _IMG_PATH . "/feed/" . $ifeed;
                     if (!is_dir($saveDirectory)) {
@@ -52,12 +52,26 @@ class FeedController extends Controller
                     $tempName = $_FILES["imgs"]["tmp_name"][$key];
                     $randomFileNm = getRandomFileNm($orginFileNm);
                     if(move_uploaded_file($tempName, $saveDirectory . "/" . $randomFileNm)){
-                      $paramImg["img"] = $randomFileNm;
-                      $ifeedImg = $this->model->insFeedImg($paramImg);
+                    // $param = ["ifeed" => $ifeed,
+                    //   "img" => $randomFileNm,
+                    // ];
+                    $paramImg["img"] = $randomFileNm;
+                      $this->model->insFeedImg($paramImg);
                     }
                 }
 
                 return ["result" => 1];
+          case _GET:
+            $page = 1;
+            if(isset($_GET["page"])){
+              $page = intval($_GET["page"]);
+            }
+            $startIdx = ($page - 1) * _FEED_ITEM_CNT;
+            $param = [
+              "startIdx" => $startIdx,
+              "iuser" => getIuser()
+            ];
+            return $this->model->selFeedList($param);
         }
     }
 }
