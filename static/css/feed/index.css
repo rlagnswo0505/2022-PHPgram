@@ -12,10 +12,6 @@ main {
   /* max-height: 500px;
   object-fit: contain; */
 }
-.size_box_100 {
-  position: relative;
-  height: 100px;
-}
 #item_container > .item {
   border: 1px solid #dfdfdf;
   border-radius: 8px;

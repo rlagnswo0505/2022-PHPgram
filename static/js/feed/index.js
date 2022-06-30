@@ -135,7 +135,7 @@
 
       divTop.innerHTML = `
                 <div class="d-flex flex-column justify-content-center">
-                    <div class="circleimg h40 w40 feedwin">${writerImg}</div>
+                    <div class="circleimg h40 w40 pointer feedwin">${writerImg}</div>
                 </div>
                 <div class="p-3 flex-grow-1">
                     <div><span class="pointer feedwin">${item.writer}</span> - ${regDtInfo}</div>
@@ -266,7 +266,10 @@
       <input type='text' class="flex-grow-1 my_input back_color" placeholder="댓글을 입력하세요...">
       <button type="button" class="btn btn-outline-primary">등록</button>
       `;
-
+      const divRegDt = document.createElement('div');
+      divRegDt.className = 'regdt';
+      divRegDt.innerHTML = `- ${regDtInfo}`;
+      divContainer.appendChild(divRegDt);
       return divContainer;
     },
 
