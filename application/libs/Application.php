@@ -21,7 +21,6 @@ class Application{
             exit();
         }
 
-        // 자동으로 객체화
         if(!in_array($controller, static::$modelList)) {
             $modelName = 'application\models\\' . $controller . 'model';
             static::$modelList[$controller] = new $modelName();

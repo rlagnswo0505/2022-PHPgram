@@ -4,6 +4,7 @@
 <body>
     <div>
         <h1>회원가입</h1>
+
         <form action="signup" method="post">
             <div><input type="email" name="email" placeholder="email" autofocus required></div>
             <div><input type="password" name="pw" placeholder="password" required></div>
@@ -12,9 +13,6 @@
                 <input type="submit" value="회원가입">
             </div>
         </form>
-        <div>
-            <a href="signin">로그인</a>
-        </div>
     </div>
 </body>
 </html>
