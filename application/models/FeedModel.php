@@ -8,13 +8,13 @@ class FeedModel extends Model {
                 (location, ctnt, iuser)
                 VALUES
                 (:location, :ctnt, :iuser)";
-         $stmt = $this->pdo->prepare($sql);
-         $stmt->bindValue(":location", $param["location"]);
-         $stmt->bindValue(":ctnt", $param["ctnt"]);
-         $stmt->bindValue(":iuser", $param["iuser"]);
-         $stmt->execute();
-         return intval($this->pdo->lastInsertId());
-    }
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(":location", $param["location"]);
+        $stmt->bindValue(":ctnt", $param["ctnt"]);
+        $stmt->bindValue(":iuser", $param["iuser"]);
+        $stmt->execute();
+        return intval($this->pdo->lastInsertId());
+  }
 
     public function insFeedImg(&$param) {
         $sql = "INSERT INTO t_feed_img
@@ -62,10 +62,32 @@ class FeedModel extends Model {
 
     public function selFeedImgList($param) {
         $sql = "SELECT img FROM t_feed_img 
-                 WHERE ifeed = :ifeed";
+                WHERE ifeed = :ifeed";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue(":ifeed", $param->ifeed);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_OBJ);        
+    }
+
+    public function insFeedFav(&$param){
+      $sql = "INSERT INTO t_feed_fav 
+              (iuser, ifeed)
+              VALUES
+              (:iuser, :ifeed)";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(":iuser", $param["iuser"]);
+        $stmt->bindValue(":ifeed", $param["ifeed"]);
+        $stmt->execute();
+        return $stmt->rowCount();
+    }
+    public function delFeedFav(&$param){
+      $sql = "DELETE FROM t_feed_fav 
+              WHERE ifeed = :ifeed 
+              AND iuser= :iuser";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(":iuser", $param["iuser"]);
+        $stmt->bindValue(":ifeed", $param["ifeed"]);
+        $stmt->execute();
+        return $stmt->rowCount();
     }
 }

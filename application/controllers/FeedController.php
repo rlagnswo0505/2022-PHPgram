@@ -13,7 +13,7 @@ class FeedController extends Controller {
         switch(getMethod()) {
             case _POST:
                 if(!is_array($_FILES) || !isset($_FILES["imgs"])) {
-                    return ["result" => 0];
+                    return [_RESULT => 0];
                 }
                 $iuser = getIuser();
                 $param = [
@@ -40,7 +40,7 @@ class FeedController extends Controller {
                     }
 
                 }
-                return ["result" => 1];
+                return [_RESULT => 1];
             
             
             case _GET:
@@ -59,5 +59,22 @@ class FeedController extends Controller {
                 }                
                 return $list;
         }
+    }
+    public function fav() {
+      $urlPaths = getUrlPaths();
+      if(!isset($urlPaths[2])){
+        exit();
+      }
+      $param = [
+        "ifeed" => intval($urlPaths[2]),
+        "iuser" => getIuser(),
+      ];
+
+      switch(getMethod()){
+        case _POST:
+          return [_RESULT => $this->model->insFeedFav($param)];
+        case _DELETE:
+          return [_RESULT => $this->model->delFeedFav($param)];
+      }
     }
 }

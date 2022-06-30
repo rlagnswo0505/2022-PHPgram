@@ -21,6 +21,8 @@
     define("_LIST", "list");
     define("_DATA", "data");
     define("_ITEM", "item");
+    define("_RESULT", "result");
+    
 
     define("_POST", "POST");
     define("_GET", "GET");
