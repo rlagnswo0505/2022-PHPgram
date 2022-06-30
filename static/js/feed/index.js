@@ -268,7 +268,7 @@
       `;
       const divRegDt = document.createElement('div');
       divRegDt.className = 'regdt';
-      divRegDt.innerHTML = `- ${regDtInfo}`;
+      divRegDt.innerHTML = regDtInfo;
       divContainer.appendChild(divRegDt);
       return divContainer;
     },

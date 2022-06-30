@@ -23,3 +23,8 @@ main {
   justify-content: center;
   align-items: center;
 }
+.regdt {
+  margin: 10px;
+  font-size: 0.8rem;
+  color: #a8a8a8;
+}
