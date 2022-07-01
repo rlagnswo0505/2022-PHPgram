@@ -25,12 +25,18 @@ class UserModel extends Model {
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_OBJ);
     }
-    public function selUserByIuser(&$param) {
-      $sql = "SELECT iuser, email, nm, cmt, mainimg, regdt 
-                FROM t_user
-               WHERE iuser = :iuser";
+    public function selUserProfile(&$param) {
+      $sql = "SELECT iuser, email, nm, cmt, mainimg,
+              (SELECT COUNT(ifeed) AS feedCnt
+              FROM t_feed
+              WHERE iuser = ?) AS feedCnt
+              FROM t_user
+              WHERE iuser = ?";
       $stmt = $this->pdo->prepare($sql);
-      $stmt->bindValue(":iuser", $param["iuser"]);
+      $stmt->bindValue(1, $param["iuser"]);
+      $stmt->bindValue(2, $param["iuser"]);
+      // ? 문자는 순차적으로 들어간다 bindValue를 사용하는 방법과 execute에 array로 집어넣는 방법 둘다 있다.
+      // $stmt->execute([$param["iuser"],$param["iuser"]]);
       $stmt->execute();
       return $stmt->fetch(PDO::FETCH_OBJ);
   }

@@ -1,0 +1,28 @@
+#changeProfileModalContent {
+  border-radius: 0.7rem;
+}
+.blue {
+  color: #3596f9;
+}
+.red {
+  color: #e44753;
+}
+.modal-title {
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal-body:not(:last-child) {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid #dee2e6;
+}
+.modal-body > p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0;
+}
