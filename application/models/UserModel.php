@@ -26,15 +26,16 @@ class UserModel extends Model {
         return $stmt->fetch(PDO::FETCH_OBJ);
     }
     public function selUserProfile(&$param) {
+      $feediuser = $param["feediuser"];
+      $loginiuser = $param["loginiuser"];
       $sql = "SELECT iuser, email, nm, cmt, mainimg,
-              (SELECT COUNT(ifeed) AS feedCnt
-              FROM t_feed
-              WHERE iuser = ?) AS feedCnt
+              (SELECT COUNT(ifeed) FROM t_feed WHERE iuser = {$feediuser}) AS feedcnt,
+              (SELECT COUNT(fromiuser) FROM t_user_follow WHERE fromiuser = {$feediuser} AND toiuser = {$loginiuser}) AS youme,
+              (SELECT COUNT(toiuser) FROM t_user_follow WHERE fromiuser = {$loginiuser} AND toiuser = {$feediuser}) AS meyou
               FROM t_user
-              WHERE iuser = ?";
+              WHERE iuser = {$feediuser}";
       $stmt = $this->pdo->prepare($sql);
-      $stmt->bindValue(1, $param["iuser"]);
-      $stmt->bindValue(2, $param["iuser"]);
+
       // ? 문자는 순차적으로 들어간다 bindValue를 사용하는 방법과 execute에 array로 집어넣는 방법 둘다 있다.
       // $stmt->execute([$param["iuser"],$param["iuser"]]);
       $stmt->execute();

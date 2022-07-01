@@ -8,15 +8,28 @@
                 </div>
             </div>
 
-            <div class="flex-grow-1 d-flex flex-column justify-content-between">
-              <div>아이디</div>
+            <div class="flex-grow-1 d-flex flex-column justify-content-evenly">
+              <div><?=$this->data->email?>
+              <?php 
+              $youme = $this->data->youme;
+              $meyou = $this->data->meyou;
+              if(getIuser() === $this->data->iuser) { ?>
+              <button type="button" id="btnModProfile" class="btn btn-outline-secondary" > 프로필 수정</button>
+              <?php }else { if($youme === 1 && $meyou === 0) {?>
+              <button type="button" id="btnFollow" data-follow="0" class="btn btn-primary" > 맞팔로우 하기</button>
+              <?php } elseif($youme === 0 && $meyou === 0) {?>
+              <button type="button" id="btnFollow" data-follow="0" class="btn btn-primary" > 팔로우</button>
+              <?php } else{?>
+              <button type="button" id="btnFollow" data-follow="1" class="btn btn-outline-secondary" > 팔로우 취소</button>
+              <?php }}?>
+            </div>
               <div class="d-flex flex-row">
-                <div class="flex-grow-1">게시물 <span>18</span></div>
-                <div class="flex-grow-1">팔로워 <span>18</span></div>
-                <div class="flex-grow-1">팔로우 <span>18</span></div>
+                <div class="flex-grow-1 me-3">게시물 <span class="bold"><?=$this->data->feedcnt?></span></div>
+                <div class="flex-grow-1 me-3">팔로워 <span class="bold"><?=$this->data->youme?></span></div>
+                <div class="flex-grow-1">팔로우 <span class="bold"><?=$this->data->meyou?></span></div>
               </div>
-              <div class="bold">이름</div>
-              <div>상태메시지(cmt)</div>
+              <div class="bold"><?=$this->data->nm?></div>
+              <div><?=$this->data->cmt?></div>
             </div>
         </div>
     </div>
