@@ -10,10 +10,27 @@
 
             <div class="flex-grow-1 d-flex flex-column justify-content-evenly">
               <div><?=$this->data->email?>
-              <?php 
+              <?php
               $youme = $this->data->youme;
               $meyou = $this->data->meyou;
-              if(getIuser() === $this->data->iuser) { ?>
+              if(getIuser() === $this->data->iuser){
+                echo '<button type="button" id="btnModProfile" class="btn btn-outline-secondary" > 프로필 수정</button>';
+              }else{
+                $data_follow = 0;
+                $cls = "btn-primary";
+                $txt = "팔로우";
+                if($meyou === 1){
+                  $data_follow = 1;
+                $cls = "btn-outline-secondary";
+                $txt = "팔로우 취소";
+                }elseif($youme === 1 && $meyou === 0){
+                  $txt = "맞팔로우 하기";
+                }
+                echo "<button type='button' id='btnFollow' data-follow='{$data_follow}' class='btn {$cls}' >{$txt}</button>";
+              }
+              ?>
+              <?php 
+              /*if(getIuser() === $this->data->iuser) { ?>
               <button type="button" id="btnModProfile" class="btn btn-outline-secondary" > 프로필 수정</button>
               <?php }else { if($youme === 1 && $meyou === 0) {?>
               <button type="button" id="btnFollow" data-follow="0" class="btn btn-primary" > 맞팔로우 하기</button>
@@ -21,7 +38,7 @@
               <button type="button" id="btnFollow" data-follow="0" class="btn btn-primary" > 팔로우</button>
               <?php } else{?>
               <button type="button" id="btnFollow" data-follow="1" class="btn btn-outline-secondary" > 팔로우 취소</button>
-              <?php }}?>
+              <?php }}*/?>
             </div>
               <div class="d-flex flex-row">
                 <div class="flex-grow-1 me-3">게시물 <span class="bold"><?=$this->data->feedcnt?></span></div>
