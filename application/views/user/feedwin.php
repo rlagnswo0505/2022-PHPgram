@@ -11,23 +11,26 @@
             <div class="flex-grow-1 d-flex flex-column justify-content-evenly">
               <div><?=$this->data->email?>
               <?php
-              $youme = $this->data->youme;
-              $meyou = $this->data->meyou;
-              if(getIuser() === $this->data->iuser){
-                echo '<button type="button" id="btnModProfile" class="btn btn-outline-secondary" > 프로필 수정</button>';
-              }else{
+              if($this->data->iuser === getIuser()) {
+                echo '<button type="button" id="btnModProfile" class="btn btn-outline-secondary">프로필 수정</button>';
+            } else {                            
                 $data_follow = 0;
                 $cls = "btn-primary";
                 $txt = "팔로우";
-                if($meyou === 1){
-                  $data_follow = 1;
-                $cls = "btn-outline-secondary";
-                $txt = "팔로우 취소";
-                }elseif($youme === 1 && $meyou === 0){
-                  $txt = "맞팔로우 하기";
+                $both =0;
+
+                if($this->data->meyou === 1) {
+                    $data_follow = 1;
+                    $cls = "btn-outline-secondary";
+                    $txt = "팔로우 취소";
+                    $both =0;
+                } else if($this->data->youme === 1 && $this->data->meyou === 0) {
+                  $cls = "btn-primary both";
+                    $txt = "맞팔로우 하기";
+                    $both = 1;
                 }
-                echo "<button type='button' id='btnFollow' data-follow='{$data_follow}' class='btn {$cls}' >{$txt}</button>";
-              }
+                echo "<button type='button' id='btnFollow' data-follow='{$data_follow}' data-both-follow='{$both}' class='btn {$cls}'>{$txt}</button>";
+            }
               ?>
               <?php 
               /*if(getIuser() === $this->data->iuser) { ?>

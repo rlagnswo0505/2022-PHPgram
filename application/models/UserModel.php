@@ -25,6 +25,8 @@ class UserModel extends Model {
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_OBJ);
     }
+
+    /* ---------------- FAV --------------- */
     public function selUserProfile(&$param) {
       $feediuser = $param["feediuser"];
       $loginiuser = $param["loginiuser"];
@@ -41,5 +43,23 @@ class UserModel extends Model {
       $stmt->execute();
       return $stmt->fetch(PDO::FETCH_OBJ);
   }
-    
+  
+
+    /* ---------------- Follow --------------- */
+
+    public function insFollow(&$param){
+      $sql = "INSERT INTO t_user_follow (fromiuser, toiuser) VALUES (:loginiuser,:feediuser)";
+      $stmt = $this->pdo->prepare($sql);
+      $stmt->bindValue(":feediuser", $param["feediuser"]);
+      $stmt->bindValue(":loginiuser", $param["loginiuser"]);    
+      $stmt->execute();
+    }
+    public function delFollow(&$param){
+      $sql = "DELETE FROM t_user_follow WHERE fromiuser=:loginiuser AND toiuser=:feediuser;";
+      $stmt = $this->pdo->prepare($sql);
+      $stmt->bindValue(":feediuser", $param["feediuser"]);
+      $stmt->bindValue(":loginiuser", $param["loginiuser"]);   
+      $stmt->execute();
+    }
+
 }

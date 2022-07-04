@@ -62,5 +62,20 @@ class UserController extends Controller {
       return "template/t1.php"; 
   }
 
-    
+  public function follow() {
+    //toIuser
+    $iuser = isset($_GET["iuser"]) ? intval($_GET["iuser"]) : 0;
+    $param = [ 
+      "feediuser" => $iuser ,
+      "loginiuser"=> getIuser(),
+      ];
+    switch(getMethod()){
+      case _POST:
+        $this->model->insFollow($param);
+        return [_RESULT => 1];
+      case _DELETE:
+        $this->model->delFollow($param);
+        return [_RESULT => 1];
+    }
+  }
 }
