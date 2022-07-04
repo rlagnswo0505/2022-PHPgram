@@ -1,31 +1,74 @@
 (function () {
+  const gData = document.querySelector('#gData');
   const btnFollow = document.querySelector('#btnFollow');
   btnFollow.addEventListener('click', () => {
-    const url = new URL(window.location.href);
-    if (btnFollow.innerText === '팔로우' || btnFollow.innerText === '맞팔로우 하기') {
-      fetch(`http://localhost/user/follow${window.location.search}`, {
-        method: 'POST',
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          btnFollow.setAttribute('data-follow', 1);
-          btnFollow.className = 'btn btn-outline-secondary';
-          btnFollow.innerText = '팔로우 취소';
-        });
-    } else if (btnFollow.innerText === '팔로우 취소') {
-      fetch(`http://localhost/user/follow${window.location.search}`, {
-        method: 'DELETE',
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          btnFollow.setAttribute('data-follow', 0);
-          btnFollow.className = 'btn btn-primary';
-          if (Number(btnFollow.getAttribute('data-both-follow')) === 1) {
-            btnFollow.innerText = '맞팔로우 하기';
-          } else {
-            btnFollow.innerText = '팔로우';
-          }
-        });
+    const param = {
+      toiuser: parseInt(gData.dataset.toiuser),
+    };
+    console.log(param);
+    const follow = btnFollow.dataset.follow;
+    const followUrl = '/user/follow';
+    switch (follow) {
+      case '1': //팔로우 취소
+        fetch(followUrl + encodeQueryString(param), { method: 'DELETE' })
+          .then((res) => res.json())
+          .then((res) => {
+            if (res.result) {
+              btnFollow.dataset.follow = '0';
+              btnFollow.className = 'btn btn-primary';
+              if (btnFollow.dataset.youme === '1') {
+                btnFollow.innerText = '맞팔로우 하기';
+              } else {
+                btnFollow.innerText = '팔로우';
+              }
+            }
+          });
+        break;
+      case '0': //팔로우 등록
+        fetch(followUrl + encodeQueryString(param), {
+          method: 'POST',
+          body: JSON.stringify(param),
+        })
+          .then((res) => res.json())
+          .then((res) => {
+            if (res.result) {
+              btnFollow.dataset.follow = '1';
+              btnFollow.className = 'btn btn-outline-secondary';
+              btnFollow.innerText = '팔로우 취소';
+            }
+          });
+        break;
     }
   });
 })();
+
+// (function () {
+//   const btnFollow = document.querySelector('#btnFollow');
+//   btnFollow.addEventListener('click', () => {
+//     if (btnFollow.innerText === '팔로우' || btnFollow.innerText === '맞팔로우 하기') {
+//       fetch(`http://localhost/user/follow${window.location.search}`, {
+//         method: 'POST',
+//       })
+//         .then((res) => res.json())
+//         .then((data) => {
+//           btnFollow.setAttribute('data-follow', 1);
+//           btnFollow.className = 'btn btn-outline-secondary';
+//           btnFollow.innerText = '팔로우 취소';
+//         });
+//     } else if (btnFollow.innerText === '팔로우 취소') {
+//       fetch(`http://localhost/user/follow${window.location.search}`, {
+//         method: 'DELETE',
+//       })
+//         .then((res) => res.json())
+//         .then((data) => {
+//           btnFollow.setAttribute('data-follow', 0);
+//           btnFollow.className = 'btn btn-primary';
+//           if (Number(btnFollow.getAttribute('data-youme')) === 1) {
+//             btnFollow.innerText = '맞팔로우 하기';
+//           } else {
+//             btnFollow.innerText = '팔로우';
+//           }
+//         });
+//     }
+//   });
+// })();

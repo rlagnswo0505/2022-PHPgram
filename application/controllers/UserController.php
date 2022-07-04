@@ -63,17 +63,15 @@ class UserController extends Controller {
   }
 
   public function follow() {
-    //toIuser
-    $iuser = isset($_GET["iuser"]) ? intval($_GET["iuser"]) : 0;
-    $param = [ 
-      "feediuser" => $iuser ,
-      "loginiuser"=> getIuser(),
-      ];
+    $param = [ "fromiuser"=> getIuser()];
     switch(getMethod()){
       case _POST:
+        $json = getJson();
+        $param["toiuser"] = $json["toiuser"];
         $this->model->insFollow($param);
         return [_RESULT => 1];
       case _DELETE:
+        $param["toiuser"] = $_GET["toiuser"];
         $this->model->delFollow($param);
         return [_RESULT => 1];
     }

@@ -1,3 +1,4 @@
+<div id="gData" data-toiuser="<?=$this->data->iuser?>"></div>
 <div class="d-flex flex-column align-items-center">
     <div class="size_box_100"></div>
     <div class="w100p_mw614">
@@ -23,13 +24,12 @@
                     $data_follow = 1;
                     $cls = "btn-outline-secondary";
                     $txt = "팔로우 취소";
-                    $both =0;
                 } else if($this->data->youme === 1 && $this->data->meyou === 0) {
                   $cls = "btn-primary both";
                     $txt = "맞팔로우 하기";
                     $both = 1;
                 }
-                echo "<button type='button' id='btnFollow' data-follow='{$data_follow}' data-both-follow='{$both}' class='btn {$cls}'>{$txt}</button>";
+                echo "<button type='button' id='btnFollow' data-follow='{$data_follow}' data-youme='{$this->data->youme}' class='btn {$cls}'>{$txt}</button>";
             }
               ?>
               <?php 

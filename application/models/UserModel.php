@@ -48,17 +48,17 @@ class UserModel extends Model {
     /* ---------------- Follow --------------- */
 
     public function insFollow(&$param){
-      $sql = "INSERT INTO t_user_follow (fromiuser, toiuser) VALUES (:loginiuser,:feediuser)";
+      $sql = "INSERT INTO t_user_follow (fromiuser, toiuser) VALUES (:fromiuser,:toiuser)";
       $stmt = $this->pdo->prepare($sql);
-      $stmt->bindValue(":feediuser", $param["feediuser"]);
-      $stmt->bindValue(":loginiuser", $param["loginiuser"]);    
+      $stmt->bindValue(":toiuser", $param["toiuser"]);
+      $stmt->bindValue(":fromiuser", $param["fromiuser"]);    
       $stmt->execute();
     }
     public function delFollow(&$param){
-      $sql = "DELETE FROM t_user_follow WHERE fromiuser=:loginiuser AND toiuser=:feediuser;";
+      $sql = "DELETE FROM t_user_follow WHERE fromiuser=:fromiuser AND toiuser=:toiuser;";
       $stmt = $this->pdo->prepare($sql);
-      $stmt->bindValue(":feediuser", $param["feediuser"]);
-      $stmt->bindValue(":loginiuser", $param["loginiuser"]);   
+      $stmt->bindValue(":toiuser", $param["toiuser"]);
+      $stmt->bindValue(":fromiuser", $param["fromiuser"]);   
       $stmt->execute();
     }
 
