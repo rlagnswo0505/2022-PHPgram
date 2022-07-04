@@ -13,7 +13,7 @@ class FeedController extends Controller {
         switch(getMethod()) {
             case _POST:
                 if(!is_array($_FILES) || !isset($_FILES["imgs"])) {
-                    return [_RESULT => 0];
+                    return ["result" => 0];
                 }
                 $iuser = getIuser();
                 $param = [
@@ -40,7 +40,7 @@ class FeedController extends Controller {
                     }
 
                 }
-                return [_RESULT => 1];
+                return ["result" => 1];
             
             
             case _GET:
@@ -52,7 +52,7 @@ class FeedController extends Controller {
                 $param = [
                     "startIdx" => $startIdx,
                     "iuser" => getIuser()
-                ];    
+                ];
                 $list = $this->model->selFeedList($param);                
                 foreach($list as $item) {                 
                     $item->imgList = $this->model->selFeedImgList($item);
@@ -60,21 +60,21 @@ class FeedController extends Controller {
                 return $list;
         }
     }
-    public function fav() {
-      $urlPaths = getUrlPaths();
-      if(!isset($urlPaths[2])){
-        exit();
-      }
-      $param = [
-        "ifeed" => intval($urlPaths[2]),
-        "iuser" => getIuser(),
-      ];
 
-      switch(getMethod()){
-        case _POST:
-          return [_RESULT => $this->model->insFeedFav($param)];
-        case _DELETE:
-          return [_RESULT => $this->model->delFeedFav($param)];
-      }
+    public function fav() {
+        $urlPaths = getUrlPaths();
+        if(!isset($urlPaths[2])) {
+            exit();
+        }
+        $param = [
+            "ifeed" => intval($urlPaths[2]),
+            "iuser" => getIuser()
+        ];
+        switch(getMethod()) {
+            case _POST:                
+                return [_RESULT => $this->model->insFeedFav($param)];
+            case _DELETE:
+                return [_RESULT => $this->model->delFeedFav($param)];
+        }
     }
 }

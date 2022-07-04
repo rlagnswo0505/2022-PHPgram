@@ -1,6 +1,8 @@
 <?php
 namespace application\controllers;
 
+use application\libs\Application;
+
 class UserController extends Controller {
 
     //로그인
@@ -49,31 +51,52 @@ class UserController extends Controller {
         $this->flash(_LOGINUSER);
         return "redirect:/user/signin";
     }
-    public function feedwin() {
-      $iuser = isset($_GET["iuser"]) ? intval($_GET["iuser"]) : 0;
-      $param = [ 
-        "feediuser" => $iuser ,
-        "loginiuser"=> getIuser(),
-        ];
-      $this->addAttribute(_DATA, $this->model->selUserProfile($param));
-      $this->addAttribute(_JS, ["user/feedwin", "https://unpkg.com/swiper@8/swiper-bundle.min.js"]);        
-      $this->addAttribute(_CSS, ["user/feedwin", "https://unpkg.com/swiper@8/swiper-bundle.min.css"]);        
-      $this->addAttribute(_MAIN, $this->getView("user/feedwin.php"));
-      return "template/t1.php"; 
-  }
 
-  public function follow() {
-    $param = [ "fromiuser"=> getIuser()];
-    switch(getMethod()){
-      case _POST:
-        $json = getJson();
-        $param["toiuser"] = $json["toiuser"];
-        $this->model->insFollow($param);
-        return [_RESULT => 1];
-      case _DELETE:
-        $param["toiuser"] = $_GET["toiuser"];
-        $this->model->delFollow($param);
-        return [_RESULT => 1];
+    public function feedwin() {
+        $iuser = isset($_GET["iuser"]) ? intval($_GET["iuser"]) : 0;
+        $param = [ "feediuser" => $iuser, "loginiuser" => getIuser() ];
+        $this->addAttribute(_DATA, $this->model->selUserProfile($param));
+        
+        $this->addAttribute(_JS, ["user/feedwin", "https://unpkg.com/swiper@8/swiper-bundle.min.js"]);
+        $this->addAttribute(_CSS, ["user/feedwin", "https://unpkg.com/swiper@8/swiper-bundle.min.css", "feed/index"]);        
+        $this->addAttribute(_MAIN, $this->getView("user/feedwin.php"));
+        return "template/t1.php"; 
     }
-  }
+
+    public function feed() {
+        if(getMethod() === _GET) {    
+            $page = 1;
+            if(isset($_GET["page"])) {
+                $page = intval($_GET["page"]);
+            }
+            $startIdx = ($page - 1) * _FEED_ITEM_CNT;
+            $iuser = isset($_GET["iuser"]) ? intval($_GET["iuser"]) : 0;
+            $param = [
+                "startIdx" => $startIdx,
+                "iuser" => getIuser(),
+                "feediuser" => $iuser,
+            ];        
+            $list = $this->model->selFeedList($param);
+            foreach($list as $item) {                 
+                $item->imgList = Application::getModel("feed")->selFeedImgList($item);
+            }
+            return $list;
+        }
+    }
+
+    public function follow() {
+        $param = [
+            "fromiuser" => getIuser()
+        ];
+
+        switch(getMethod()) {
+            case _POST:                                
+                $json = getJson();
+                $param["toiuser"] = $json["toiuser"];
+                return [_RESULT => $this->model->insUserFollow($param)];
+            case _DELETE:        
+                $param["toiuser"] = $_GET["toiuser"];
+                return [_RESULT => $this->model->delUserFollow($param)];
+        }
+    }
 }
