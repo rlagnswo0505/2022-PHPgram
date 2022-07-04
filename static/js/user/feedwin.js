@@ -1,12 +1,15 @@
+const url = new URL(location.href);
 function getFeedList() {
   if (!feedObj) {
     return;
   }
+  const urlParams = url.searchParams;
+
   feedObj.showLoading();
-  const iuser = location.search.split('?iuser=');
+  // const iuser = location.search.split('?iuser=');
   const param = {
     page: feedObj.currentPage++,
-    iuser: iuser[1],
+    iuser: urlParams.get('iuser'),
   };
   fetch('/user/feed' + encodeQueryString(param) + location.search)
     .then((res) => res.json())
