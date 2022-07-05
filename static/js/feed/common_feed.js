@@ -66,7 +66,6 @@ const feedObj = {
     this.hideLoading();
   },
   makeFeedItem: function (item) {
-    console.log(item);
     const divContainer = document.createElement('div');
     divContainer.className = 'item mt-3 mb-3';
 
@@ -124,16 +123,23 @@ const feedObj = {
     const heartIcon = document.createElement('i');
     divBtns.appendChild(heartIcon);
     heartIcon.className = 'fa-heart pointer rem1_5 me-3';
-    heartIcon.classList.add(item.isFav === 1 ? 'fas' : 'far');
+    heartIcon.classList.add(item.isFav === 1 ? 'fa-solid' : 'fa-regular');
     heartIcon.addEventListener('click', (e) => {
       let method = 'POST';
-      if (item.favCnt === 0) {
+      if (item.isFav === 0) {
         divFav.classList.remove('d-none');
-        spanFavCnt.innerHTML = `좋아요 ${item.favCnt + 1}개`;
+        item.favCnt = item.favCnt + 1;
+        spanFavCnt.innerHTML = `좋아요 ${item.favCnt}개`;
       }
       if (item.isFav === 1) {
         //delete (1은 0으로 바꿔줘야 함)
         method = 'DELETE';
+        divFav.classList.remove('d-none');
+        item.favCnt = item.favCnt - 1;
+        spanFavCnt.innerHTML = `좋아요 ${item.favCnt}개`;
+        if (item.favCnt === 0) {
+          divFav.classList.add('d-none');
+        }
       }
       fetch(`/feed/fav/${item.ifeed}`, {
         method: method,
@@ -144,12 +150,12 @@ const feedObj = {
             item.isFav = 1 - item.isFav; // 0 > 1, 1 > 0
             if (item.isFav === 0) {
               // 좋아요 취소
-              heartIcon.classList.remove('fas');
-              heartIcon.classList.add('far');
+              heartIcon.classList.remove('fa-solid');
+              heartIcon.classList.add('fa-regular');
             } else {
               // 좋아요 처리
-              heartIcon.classList.remove('far');
-              heartIcon.classList.add('fas');
+              heartIcon.classList.remove('fa-regular');
+              heartIcon.classList.add('fa-solid');
             }
           } else {
             alert('좋아요를 할 수 없습니다.');
@@ -159,7 +165,6 @@ const feedObj = {
           alert('네트워크에 이상이 있습니다.');
         });
     });
-
     const divDm = document.createElement('div');
     divBtns.appendChild(divDm);
     divDm.className = 'pointer';
