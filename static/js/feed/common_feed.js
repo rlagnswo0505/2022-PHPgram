@@ -127,11 +127,14 @@ const feedObj = {
     heartIcon.classList.add(item.isFav === 1 ? 'fas' : 'far');
     heartIcon.addEventListener('click', (e) => {
       let method = 'POST';
+      if (item.favCnt === 0) {
+        divFav.classList.remove('d-none');
+        spanFavCnt.innerHTML = `좋아요 ${item.favCnt + 1}개`;
+      }
       if (item.isFav === 1) {
         //delete (1은 0으로 바꿔줘야 함)
         method = 'DELETE';
       }
-
       fetch(`/feed/fav/${item.ifeed}`, {
         method: method,
       })
