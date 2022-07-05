@@ -16,13 +16,14 @@ const feedObj = {
               <img src="${src}" class="profile w24 pointer">                
           </div>
           <div class="d-flex flex-row">
-              <div class="pointer me-2">${item.writer} - ${getDateTimeInfo(item.regdt)}</div>
+              <div class="pointer me-2">${item.writer} - <span class="rem0_8">${getDateTimeInfo(
+      item.regdt
+    )}</span></div>
               <div>${item.cmt}</div>
           </div>
       `;
     return divCmtItemContainer;
   },
-
   makeFeedList: function (list) {
     if (list.length !== 0) {
       list.forEach((item) => {
@@ -48,6 +49,7 @@ const feedObj = {
     this.hideLoading();
   },
   makeFeedItem: function (item) {
+    console.log(item);
     const divContainer = document.createElement('div');
     divContainer.className = 'item mt-3 mb-3';
 
@@ -94,7 +96,7 @@ const feedObj = {
 
       const img = document.createElement('img');
       divSwiperSlide.appendChild(img);
-      img.className = 'w100p_mw614';
+      img.className = 'w100p_mw614 pointer';
       img.src = `/static/img/feed/${item.ifeed}/${imgObj.img}`;
       // 이미지 클릭시 이미지 보이기
       img.addEventListener('click', () => {
@@ -102,11 +104,11 @@ const feedObj = {
         imgBox.classList = 'modal modal-img d-flex pointer imgBox';
         imgBox.tabIndex = '2';
         imgBox.innerHTML = `
-        <div class="modal-dialog">
-          <div class="modal-content img-modal-content">
-            <img src="${img.src}">
-          </div>
-        </div>`;
+  <div class="modal-dialog">
+    <div class="modal-content img-modal-content">
+      <img src="${img.src}">
+    </div>
+  </div>`;
         const main = document.querySelector('main');
         main.appendChild(imgBox);
         imgBox.addEventListener('click', () => {
@@ -156,7 +158,6 @@ const feedObj = {
     });
 
     const divDm = document.createElement('div');
-
     divBtns.appendChild(divDm);
     divDm.className = 'pointer';
     divDm.innerHTML = `<svg aria-label="다이렉트 메시지" class="_8-yf5 " color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><line fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2" x1="22" x2="9.218" y1="3" y2="10.083"></line><polygon fill="none" points="11.698 20.334 22 3.001 2 3.001 9.218 10.084 11.698 20.334" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></polygon></svg>`;
@@ -183,24 +184,27 @@ const feedObj = {
     const divCmtList = document.createElement('div');
     divContainer.appendChild(divCmtList);
     divCmtList.className = 'ms-3';
+
     const divCmt = document.createElement('div');
+    divContainer.appendChild(divCmt);
+
     if (item.cmt) {
       const divCmtItem = this.makeCmtItem(item.cmt);
       divCmtList.appendChild(divCmtItem);
 
-      divContainer.appendChild(divCmt);
-
-      if (item.cmt && item.cmt.ismore === 1) {
+      if (item.cmt.ismore === 1) {
         const divMoreCmt = document.createElement('div');
         divCmt.appendChild(divMoreCmt);
+        divMoreCmt.className = 'ms-3 mb-3';
+
         const spanMoreCmt = document.createElement('span');
         divMoreCmt.appendChild(spanMoreCmt);
-        divMoreCmt.className = 'ms-3';
-        spanMoreCmt.className = 'pointer';
+        spanMoreCmt.className = 'pointer rem0_9 c_lightgray';
         spanMoreCmt.innerText = '댓글 더보기..';
-        spanMoreCmt.addEventListener('click', (e = {}));
+        spanMoreCmt.addEventListener('click', (e) => {});
       }
     }
+
     const divCmtForm = document.createElement('div');
     divCmtForm.className = 'd-flex flex-row';
     divCmt.appendChild(divCmtForm);
@@ -209,9 +213,9 @@ const feedObj = {
           <input type="text" class="flex-grow-1 my_input back_color p-2" placeholder="댓글을 입력하세요...">
           <button type="button" class="btn btn-outline-primary">등록</button>
       `;
-    const btnCmtReg = divCmtForm.querySelector('button');
     const inputCmt = divCmtForm.querySelector('input');
-    btnCmtReg.addEventListener('click', () => {
+    const btnCmtReg = divCmtForm.querySelector('button');
+    btnCmtReg.addEventListener('click', (e) => {
       const param = {
         ifeed: item.ifeed,
         cmt: inputCmt.value,
@@ -224,13 +228,12 @@ const feedObj = {
         .then((res) => {
           console.log('icmt : ' + res.result);
           if (res.result) {
-            const cmtSpan = document.querySelector('span');
-            cmtSpan.innerText = `iuser = ${res.iuser}, cmt = ${res.cmt}`;
-            divCmtList.appendChild(cmtSpan);
             inputCmt.value = '';
+            //댓글 공간에 댓글 내용 추가
           }
         });
     });
+
     return divContainer;
   },
 
