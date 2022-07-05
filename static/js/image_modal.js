@@ -15,3 +15,15 @@ img.addEventListener('click', () => {
     imgBox.remove();
   });
 });
+// const divCmtClose = document.createElement('div');
+// divCmtClose.className = `divCmtClose`;
+// divCmtClose.innerText = `숨기기`;
+// divCmtList.appendChild(divCmtClose);
+// const moreCmt = document.querySelectorAll('.moreCmt');
+// divCmtClose.addEventListener('click', () => {
+//   console.log('dkdkdk');
+//   moreCmt.forEach((item) => {
+//     item.classList.add('d-none');
+//   });
+// });
+<i class="fa-solid fa-circle-chevron-right"></i>;

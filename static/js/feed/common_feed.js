@@ -5,23 +5,55 @@ const feedObj = {
   swiper: null,
   loadingElem: document.querySelector('.loading'),
   containerElem: document.querySelector('#item_container'),
+  insFeedCmt: function (param, inputCmt, divCmtList, spanMoreCmt) {
+    fetch('/feedcmt/index', {
+      method: 'POST',
+      body: JSON.stringify(param),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log('icmt : ' + res.result);
+        if (res.result) {
+          //댓글 공간에 댓글 내용 추가
+          inputCmt.value = '';
+          this.getFeedCmtList(param.ifeed, divCmtList, spanMoreCmt);
+        }
+      });
+  },
+  getFeedCmtList: function (ifeed, divCmtList, spanMoreCmt) {
+    fetch(`/feedcmt/index?ifeed=${ifeed}`)
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        if (res && res.length > 0) {
+          if (spanMoreCmt) {
+            spanMoreCmt.remove();
+          }
+          divCmtList.innerHtml = null;
+          res.forEach((item) => {
+            const divCmtItem = this.makeCmtItem(item);
+            divCmtList.appendChild(divCmtItem);
+          });
+        }
+      });
+  },
   makeCmtItem: function (item) {
     const divCmtItemContainer = document.createElement('div');
     divCmtItemContainer.className = 'd-flex flex-row align-items-center mb-2';
-    const src =
-      '/static/img/profile/' +
-      (item.writerimg ? `${item.iuser}/${item.writerimg}` : 'defaultProfileImg_100.png');
+    const src = '/static/img/profile/' + (item.writerimg ? `${item.iuser}/${item.writerimg}` : 'defaultProfileImg_100.png');
     divCmtItemContainer.innerHTML = `
           <div class="circleimg h24 w24 me-1">
               <img src="${src}" class="profile w24 pointer">                
           </div>
           <div class="d-flex flex-row">
-              <div class="pointer me-2">${item.writer} - <span class="rem0_8">${getDateTimeInfo(
-      item.regdt
-    )}</span></div>
+              <div class="pointer me-2">${item.writer} - <span class="rem0_8">${getDateTimeInfo(item.regdt)}</span></div>
               <div>${item.cmt}</div>
           </div>
       `;
+    const cmtProfile = divCmtItemContainer.querySelector('.pointer.me-2');
+    cmtProfile.addEventListener('click', () => moveToFeedWin(item.iuser));
+    const cmtProfileImg = divCmtItemContainer.querySelector('.circleimg');
+    cmtProfileImg.addEventListener('click', () => moveToFeedWin(item.iuser));
     return divCmtItemContainer;
   },
   makeFeedList: function (list) {
@@ -84,8 +116,8 @@ const feedObj = {
     divImgSwiper.innerHTML = `
           <div class="swiper-wrapper align-items-center"></div>
           <div class="swiper-pagination"></div>
-          <div class="swiper-button-prev"></div>
-          <div class="swiper-button-next"></div>
+          <div class="swiper-button-prev"><i class="fa-solid fa-circle-chevron-left rem1_5"></i></div>
+          <div class="swiper-button-next"><i class="fa-solid fa-circle-chevron-right rem1_5"></i></div>
       `;
     const divSwiperWrapper = divImgSwiper.querySelector('.swiper-wrapper');
 
@@ -160,7 +192,7 @@ const feedObj = {
     const divDm = document.createElement('div');
     divBtns.appendChild(divDm);
     divDm.className = 'pointer';
-    divDm.innerHTML = `<svg aria-label="다이렉트 메시지" class="_8-yf5 " color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><line fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2" x1="22" x2="9.218" y1="3" y2="10.083"></line><polygon fill="none" points="11.698 20.334 22 3.001 2 3.001 9.218 10.084 11.698 20.334" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></polygon></svg>`;
+    divDm.innerHTML = `<svg aria-label="다이렉트 메시지" class="_8-yf5" color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><line fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2" x1="22" x2="9.218" y1="3" y2="10.083"></line><polygon fill="none" points="11.698 20.334 22 3.001 2 3.001 9.218 10.084 11.698 20.334" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></polygon></svg>`;
 
     const divFav = document.createElement('div');
     divContainer.appendChild(divFav);
@@ -187,6 +219,7 @@ const feedObj = {
 
     const divCmt = document.createElement('div');
     divContainer.appendChild(divCmt);
+    const spanMoreCmt = document.createElement('span');
 
     if (item.cmt) {
       const divCmtItem = this.makeCmtItem(item.cmt);
@@ -197,11 +230,12 @@ const feedObj = {
         divCmt.appendChild(divMoreCmt);
         divMoreCmt.className = 'ms-3 mb-3';
 
-        const spanMoreCmt = document.createElement('span');
         divMoreCmt.appendChild(spanMoreCmt);
         spanMoreCmt.className = 'pointer rem0_9 c_lightgray';
         spanMoreCmt.innerText = '댓글 더보기..';
-        spanMoreCmt.addEventListener('click', (e) => {});
+        spanMoreCmt.addEventListener('click', (e) => {
+          this.getFeedCmtList(item.ifeed, divCmtList, spanMoreCmt);
+        });
       }
     }
 
@@ -213,7 +247,13 @@ const feedObj = {
           <input type="text" class="flex-grow-1 my_input back_color p-2" placeholder="댓글을 입력하세요...">
           <button type="button" class="btn btn-outline-primary">등록</button>
       `;
+
     const inputCmt = divCmtForm.querySelector('input');
+    inputCmt.addEventListener('keyup', (e) => {
+      if (e.key === 'Enter') {
+        btnCmtReg.click();
+      }
+    });
     const btnCmtReg = divCmtForm.querySelector('button');
     btnCmtReg.addEventListener('click', (e) => {
       const param = {
@@ -228,8 +268,9 @@ const feedObj = {
         .then((res) => {
           console.log('icmt : ' + res.result);
           if (res.result) {
-            inputCmt.value = '';
             //댓글 공간에 댓글 내용 추가
+            inputCmt.value = '';
+            this.getFeedCmtList(param.ifeed, divCmtList, spanMoreCmt);
           }
         });
     });

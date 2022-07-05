@@ -5,6 +5,7 @@
     <title><?= isset($this->title) ? $this->title : _SERVICE_NM ?></title>
     <link rel="stylesheet" href="/static/css/common.css">
     <link rel="icon" type="image/png" sizes="16x16" href="/static/img/favicons/favicon-16x16.png">
+    <script src="https://kit.fontawesome.com/8eb4f0837a.js" crossorigin="anonymous" defer></script>
     <?php 
         if(isset($this->css)) {
             foreach($this->css as $item) {
