@@ -3,33 +3,32 @@ const feedObj = {
   itemLength: 0,
   currentPage: 1,
   swiper: null,
+  refreshSwipe: function () {
+    if (this.swiper !== null) {
+      this.swiper = null;
+    }
+    this.swiper = new Swiper('.swiper', {
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      pagination: { el: '.swiper-pagination' },
+      allowTouchMove: false,
+      direction: 'horizontal',
+      loop: false,
+    });
+  },
   loadingElem: document.querySelector('.loading'),
   containerElem: document.querySelector('#item_container'),
-  insFeedCmt: function (param, inputCmt, divCmtList, spanMoreCmt) {
-    fetch('/feedcmt/index', {
-      method: 'POST',
-      body: JSON.stringify(param),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log('icmt : ' + res.result);
-        if (res.result) {
-          //댓글 공간에 댓글 내용 추가
-          inputCmt.value = '';
-          this.getFeedCmtList(param.ifeed, divCmtList, spanMoreCmt);
-        }
-      });
-  },
   getFeedCmtList: function (ifeed, divCmtList, spanMoreCmt) {
     fetch(`/feedcmt/index?ifeed=${ifeed}`)
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
         if (res && res.length > 0) {
           if (spanMoreCmt) {
             spanMoreCmt.remove();
           }
-          divCmtList.innerHtml = null;
+          divCmtList.innerHTML = null;
           res.forEach((item) => {
             const divCmtItem = this.makeCmtItem(item);
             divCmtList.appendChild(divCmtItem);
@@ -50,10 +49,10 @@ const feedObj = {
               <div>${item.cmt}</div>
           </div>
       `;
-    const cmtProfile = divCmtItemContainer.querySelector('.pointer.me-2');
-    cmtProfile.addEventListener('click', () => moveToFeedWin(item.iuser));
-    const cmtProfileImg = divCmtItemContainer.querySelector('.circleimg');
-    cmtProfileImg.addEventListener('click', () => moveToFeedWin(item.iuser));
+    const img = divCmtItemContainer.querySelector('img');
+    img.addEventListener('click', (e) => {
+      moveToFeedWin(item.iuser);
+    });
     return divCmtItemContainer;
   },
   makeFeedList: function (list) {
@@ -63,21 +62,7 @@ const feedObj = {
         this.containerElem.appendChild(divItem);
       });
     }
-
-    if (this.swiper !== null) {
-      this.swiper = null;
-    }
-    this.swiper = new Swiper('.swiper', {
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-      pagination: { el: '.swiper-pagination' },
-      allowTouchMove: false,
-      direction: 'horizontal',
-      loop: false,
-    });
-
+    this.refreshSwipe();
     this.hideLoading();
   },
   makeFeedItem: function (item) {
@@ -128,25 +113,8 @@ const feedObj = {
 
       const img = document.createElement('img');
       divSwiperSlide.appendChild(img);
-      img.className = 'w100p_mw614 pointer';
+      img.className = 'w100p_mw614';
       img.src = `/static/img/feed/${item.ifeed}/${imgObj.img}`;
-      // 이미지 클릭시 이미지 보이기
-      img.addEventListener('click', () => {
-        const imgBox = document.createElement('div');
-        imgBox.classList = 'modal modal-img d-flex pointer imgBox';
-        imgBox.tabIndex = '2';
-        imgBox.innerHTML = `
-  <div class="modal-dialog">
-    <div class="modal-content img-modal-content">
-      <img src="${img.src}">
-    </div>
-  </div>`;
-        const main = document.querySelector('main');
-        main.appendChild(imgBox);
-        imgBox.addEventListener('click', () => {
-          imgBox.remove();
-        });
-      });
     });
 
     const divBtns = document.createElement('div');
@@ -192,8 +160,8 @@ const feedObj = {
     const divDm = document.createElement('div');
     divBtns.appendChild(divDm);
     divDm.className = 'pointer';
-    divDm.innerHTML = `<svg aria-label="다이렉트 메시지" class="_8-yf5" color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><line fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2" x1="22" x2="9.218" y1="3" y2="10.083"></line><polygon fill="none" points="11.698 20.334 22 3.001 2 3.001 9.218 10.084 11.698 20.334" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></polygon></svg>`;
-
+    divDm.innerHTML = `<svg aria-label="다이렉트 메시지" class="_8-yf5 " color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><line fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2" x1="22" x2="9.218" y1="3" y2="10.083"></line><polygon fill="none" points="11.698 20.334 22 3.001 2 3.001 9.218 10.084 11.698 20.334" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></polygon></svg>`;
+    // 좋아요 표시
     const divFav = document.createElement('div');
     divContainer.appendChild(divFav);
     divFav.className = 'p-3 d-none';
@@ -219,6 +187,7 @@ const feedObj = {
 
     const divCmt = document.createElement('div');
     divContainer.appendChild(divCmt);
+
     const spanMoreCmt = document.createElement('span');
 
     if (item.cmt) {
@@ -266,9 +235,7 @@ const feedObj = {
       })
         .then((res) => res.json())
         .then((res) => {
-          console.log('icmt : ' + res.result);
           if (res.result) {
-            //댓글 공간에 댓글 내용 추가
             inputCmt.value = '';
             this.getFeedCmtList(param.ifeed, divCmtList, spanMoreCmt);
           }
@@ -343,8 +310,17 @@ function moveToFeedWin(iuser) {
             .then((myJson) => {
               console.log(myJson);
 
-              if (myJson.result) {
+              if (myJson) {
                 btnClose.click();
+                const lData = document.querySelector('#lData');
+                const gData = document.querySelector('#gData');
+                if (lData && lData.dataset.toiuser !== gData.dataset.loginiuser) {
+                  return;
+                }
+                // 남의 feedWin이 아니라면 화면에 등록!!!
+                const feedItem = feedObj.makeFeedItem(myJson);
+                feedObj.containerElem.prepend(feedItem);
+                feedObj.refreshSwipe();
               }
             });
         });

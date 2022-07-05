@@ -243,11 +243,15 @@ nav a {
 .swiper-pagination-bullet-active {
   background: #fd5949 !important;
 }
-/* .favCont {
+.swiper-slide {
+  padding-bottom: 50px;
+}
+.favCont {
   margin-top: -50px;
   z-index: 100;
   position: absolute;
 }
+/*
 .favCont i {
   color: rgba(255, 255, 255, 0.829);
   text-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;

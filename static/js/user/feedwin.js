@@ -24,18 +24,19 @@ function getFeedList() {
 getFeedList();
 
 (function () {
-  const gData = document.querySelector('#gData');
+  const lData = document.querySelector('#lData');
 
   const btnFollow = document.querySelector('#btnFollow');
   if (btnFollow) {
     btnFollow.addEventListener('click', function () {
       const param = {
-        toiuser: parseInt(gData.dataset.toiuser),
+        toiuser: parseInt(lData.dataset.toiuser),
       };
       console.log(param);
       const follow = btnFollow.dataset.follow;
       console.log('follow : ' + follow);
       const followUrl = '/user/follow';
+      const spanFollower = document.querySelector('.divFollower span');
       switch (follow) {
         case '1': //팔로우 취소
           fetch(followUrl + encodeQueryString(param), { method: 'DELETE' })
@@ -43,6 +44,8 @@ getFeedList();
             .then((res) => {
               if (res.result) {
                 btnFollow.dataset.follow = '0';
+                const followerCnt = ~~spanFollower.innerText - 1;
+                spanFollower.innerText = followerCnt;
                 btnFollow.classList.remove('btn-outline-secondary');
                 btnFollow.classList.add('btn-primary');
                 if (btnFollow.dataset.youme === '1') {
@@ -62,6 +65,8 @@ getFeedList();
             .then((res) => {
               if (res.result) {
                 btnFollow.dataset.follow = '1';
+                const followerCnt = ~~spanFollower.innerText + 1;
+                spanFollower.innerText = followerCnt;
                 btnFollow.classList.remove('btn-primary');
                 btnFollow.classList.add('btn-outline-secondary');
                 btnFollow.innerText = '팔로우 취소';
