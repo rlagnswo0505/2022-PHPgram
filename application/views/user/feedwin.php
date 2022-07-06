@@ -54,7 +54,7 @@
                 <span class="c_primary-button bold pointer blue">사진 업로드</span>
             </div>
             <div class="_modal_item">
-                <span class="c_error-or-destructive bold pointer red">현재 사진 삭제</span>
+                <span id="btnDelCurrentProfilePic"class="c_error-or-destructive bold pointer red">현재 사진 삭제</span>
             </div>
             <div class="_modal_item">
                 <span class="pointer" data-bs-dismiss="modal">취소</span>

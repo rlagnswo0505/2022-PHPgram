@@ -14,6 +14,7 @@
   align-items: center;
 }
 ._modal_item {
+  padding: 10px 0;
   cursor: pointer;
   display: flex;
   justify-content: center;
@@ -27,4 +28,7 @@
   justify-content: center;
   align-items: center;
   margin-bottom: 0;
+}
+.modal-open {
+  padding: 0 !important;
 }

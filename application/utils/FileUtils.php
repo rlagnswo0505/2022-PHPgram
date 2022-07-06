@@ -1,4 +1,7 @@
 <?php
+function delfile($path){
+
+}
 function getRandomFileNm($fileName) {
     return gen_uuid_v4() . "." . getExt($fileName);
 }

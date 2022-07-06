@@ -79,6 +79,9 @@ nav a {
 .div-top {
   border-top: 1px solid #e3e3e3;
 }
+.border-bottom {
+  border-bottom: 1px solid #e3e3e3;
+}
 .err {
   color: red;
 }
@@ -247,19 +250,36 @@ nav a {
   padding-bottom: 50px;
 }
 .favCont {
-  margin-top: -50px;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: -40px;
   z-index: 100;
   position: absolute;
 }
-/*
-.favCont i {
-  color: rgba(255, 255, 255, 0.829);
-  text-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+.leftBtns {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.favCont svg {
+
+.favCont i:hover {
+  color: #8e8e8e;
+}
+.favCont svg:hover {
+  color: #8e8e8e;
+}
+.fa-solid.fa-heart:hover {
+  color: #e44753;
+}
+/* .favCont svg {
   color: rgba(255, 255, 255, 0.829);
   text-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 }
 .favCont svg polygon {
   text-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+*/
+.cmtBox {
+  padding: 5px 0;
+  border-top: 1px solid #dee2e6;
 }

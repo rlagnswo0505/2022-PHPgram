@@ -102,4 +102,15 @@ class UserController extends Controller {
                 return [_RESULT => $this->model->delUserFollow($param)];
         }
     }
+    public function profile(){
+      switch(getMethod()){
+        case _DELETE:
+          $mainimg = getLoginUser()->mainimg;
+          if($mainimg){
+            
+          }
+          return [_RESULT => 1];
+
+      }
+    }
 }

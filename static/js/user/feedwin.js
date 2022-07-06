@@ -34,8 +34,8 @@ getFeedList();
 
 (function () {
   const lData = document.querySelector('#lData');
-
   const btnFollow = document.querySelector('#btnFollow');
+  const btnDelCurrentProfilePic = document.querySelector('#btnDelCurrentProfilePic');
   if (btnFollow) {
     btnFollow.addEventListener('click', function () {
       const param = {
@@ -85,6 +85,13 @@ getFeedList();
             });
           break;
       }
+    });
+  }
+  if (btnDelCurrentProfilePic) {
+    btnDelCurrentProfilePic.addEventListener('click', (e) => {
+      fetch('')
+        .then((res) => res.json())
+        .then((res) => console.log(res));
     });
   }
 })();

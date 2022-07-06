@@ -76,7 +76,7 @@ const feedObj = {
   },
   makeCmtItem: function (item) {
     const divCmtItemContainer = document.createElement('div');
-    divCmtItemContainer.className = 'd-flex flex-row align-items-center mb-2';
+    divCmtItemContainer.className = 'd-flex flex-row align-items-center mt-1 mb-2';
     const src = '/static/img/profile/' + (item.writerimg ? `${item.iuser}/${item.writerimg}` : 'defaultProfileImg_100.png');
     divCmtItemContainer.innerHTML = `
           <div class="circleimg h24 w24 me-1">
@@ -111,7 +111,7 @@ const feedObj = {
     divContainer.appendChild(divTop);
 
     const regDtInfo = getDateTimeInfo(item.regdt);
-    divTop.className = 'd-flex flex-row ps-3 pe-3';
+    divTop.className = 'd-flex flex-row ps-3 pe-3 border-bottom';
     const writerImg = `<img src='/static/img/profile/${item.iuser}/${item.mainimg}' 
           onerror='this.error=null;this.src="/static/img/profile/defaultProfileImg_100.png"'>`;
 
@@ -122,6 +122,9 @@ const feedObj = {
           <div class="p-3 flex-grow-1">
               <div><span class="pointer feedwin">${item.writer}</span> - ${regDtInfo}</div>
               <div>${item.location === null ? '' : item.location}</div>
+          </div>
+          <div class="p-3 pointer">
+          <i class="fa-solid fa-ellipsis rem1_5"></i>
           </div>
       `;
 
@@ -172,30 +175,36 @@ const feedObj = {
     });
 
     const divBtns = document.createElement('div');
+    const leftBtns = document.createElement('div');
+    leftBtns.classList = 'leftBtns';
     divContainer.appendChild(divBtns);
-    divBtns.className = 'favCont p-3 d-flex flex-row';
+    divBtns.appendChild(leftBtns);
+    divBtns.className = 'favCont w100p_mw614 pe-3 ps-3 d-flex flex-row ';
 
     const heartIcon = document.createElement('i');
-    divBtns.appendChild(heartIcon);
+    leftBtns.appendChild(heartIcon);
     heartIcon.className = 'fa-heart pointer rem1_5 me-3';
     heartIcon.classList.add(item.isFav === 1 ? 'fa-solid' : 'fa-regular');
     heartIcon.addEventListener('click', (e) => {
       let method = 'POST';
-      if (item.isFav === 0) {
-        divFav.classList.remove('d-none');
-        item.favCnt = item.favCnt + 1;
-        spanFavCnt.innerHTML = `좋아요 ${item.favCnt}개`;
-      }
       if (item.isFav === 1) {
-        //delete (1은 0으로 바꿔줘야 함)
         method = 'DELETE';
-        divFav.classList.remove('d-none');
-        item.favCnt = item.favCnt - 1;
-        spanFavCnt.innerHTML = `좋아요 ${item.favCnt}개`;
-        if (item.favCnt === 0) {
-          divFav.classList.add('d-none');
-        }
       }
+      // if (item.isFav === 0) {
+      //   divFav.classList.remove('d-none');
+      //   item.favCnt = item.favCnt + 1;
+      //   spanFavCnt.innerHTML = `좋아요 ${item.favCnt}개`;
+      // }
+      // if (item.isFav === 1) {
+      //   // delete (1은 0으로 바꿔줘야 함)
+      //   method = 'DELETE';
+      //   divFav.classList.remove('d-none');
+      //   item.favCnt = item.favCnt - 1;
+      //   spanFavCnt.innerHTML = `좋아요 ${item.favCnt}개`;
+      //   if (item.favCnt === 0) {
+      //     divFav.classList.add('d-none');
+      //   }
+      // }
       fetch(`/feed/fav/${item.ifeed}`, {
         method: method,
       })
@@ -207,11 +216,18 @@ const feedObj = {
               // 좋아요 취소
               heartIcon.classList.remove('fa-solid');
               heartIcon.classList.add('fa-regular');
+              item.favCnt--;
+              if (item.favCnt === 0) {
+                divFav.classList.add('d-none');
+              }
             } else {
               // 좋아요 처리
               heartIcon.classList.remove('fa-regular');
               heartIcon.classList.add('fa-solid');
+              item.favCnt++;
+              divFav.classList.remove('d-none');
             }
+            spanFavCnt.innerHTML = `좋아요 ${item.favCnt}개`;
           } else {
             alert('좋아요를 할 수 없습니다.');
           }
@@ -220,10 +236,19 @@ const feedObj = {
           alert('네트워크에 이상이 있습니다.');
         });
     });
+    const divMsg = document.createElement('div');
+
+    leftBtns.appendChild(divMsg);
+    divMsg.className = 'pointer rem1_5 me-3';
+    divMsg.innerHTML = '<i class="fa-regular fa-comment"></i>';
     const divDm = document.createElement('div');
-    divBtns.appendChild(divDm);
+    leftBtns.appendChild(divDm);
     divDm.className = 'pointer';
     divDm.innerHTML = `<svg aria-label="다이렉트 메시지" class="_8-yf5 " color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><line fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2" x1="22" x2="9.218" y1="3" y2="10.083"></line><polygon fill="none" points="11.698 20.334 22 3.001 2 3.001 9.218 10.084 11.698 20.334" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></polygon></svg>`;
+    const divBmk = document.createElement('div');
+    divBmk.className = 'pointer rem1_5 me-3 container-center';
+    divBmk.innerHTML = '<i class="fa-regular fa-bookmark"></i>';
+    divBtns.appendChild(divBmk);
     // 좋아요 표시
     const divFav = document.createElement('div');
     divContainer.appendChild(divFav);
@@ -272,12 +297,13 @@ const feedObj = {
     }
 
     const divCmtForm = document.createElement('div');
-    divCmtForm.className = 'd-flex flex-row';
+    divCmtForm.className = 'd-flex flex-row cmtBox';
     divCmt.appendChild(divCmtForm);
 
     divCmtForm.innerHTML = `
+          <div class="container-center p-2 pointer"><i class="fa-regular fa-face-smile rem1_5"></i></div>
           <input type="text" class="flex-grow-1 my_input back_color p-2" placeholder="댓글을 입력하세요...">
-          <button type="button" class="btn btn-outline-primary">등록</button>
+          <button type="button" class="btn btn-outline-primary bold">게시</button>
       `;
 
     const inputCmt = divCmtForm.querySelector('input');
