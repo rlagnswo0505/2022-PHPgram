@@ -1,11 +1,29 @@
 const feedObj = {
-  limit: 20,
+  limit: 8,
   itemLength: 0,
   currentPage: 1,
   swiper: null,
   getFeedUrl: '',
   iuser: 0,
+  setScrollInfinity: function () {
+    window.addEventListener(
+      'scroll',
+      (e) => {
+        if (this.isLoading()) {
+          return;
+        }
+        // 구조 분할 할당
+        const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+        // console.log(scrollTop, scrollHeight, clientHeight);
+        if (scrollTop + clientHeight >= scrollHeight - 20 && this.itemLength === this.limit) {
+          this.getFeedList();
+        }
+      },
+      { passive: true }
+    );
+  },
   getFeedList: function () {
+    this.itemLength = 0;
     this.showLoading();
     const param = {
       page: this.currentPage++,
@@ -14,6 +32,7 @@ const feedObj = {
     fetch(this.getFeedUrl + encodeQueryString(param))
       .then((res) => res.json())
       .then((list) => {
+        this.itemLength = list.length;
         this.makeFeedList(list);
       })
       .catch((e) => {
@@ -295,6 +314,9 @@ const feedObj = {
   hideLoading: function () {
     this.loadingElem.classList.add('d-none');
   },
+  isLoading: function () {
+    return !this.loadingElem.classList.contains('d-none');
+  },
 };
 
 function moveToFeedWin(iuser) {
@@ -365,6 +387,7 @@ function moveToFeedWin(iuser) {
                 const feedItem = feedObj.makeFeedItem(myJson);
                 feedObj.containerElem.prepend(feedItem);
                 feedObj.refreshSwipe();
+                window.scrollTo(0, 0);
               }
             });
         });
