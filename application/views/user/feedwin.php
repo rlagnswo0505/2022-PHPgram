@@ -51,7 +51,7 @@
                 <h5 class="modal-title bold">프로필 사진 바꾸기</h5>
             </div>
             <div class="_modal_item">
-                <span class="c_primary-button bold pointer blue">사진 업로드</span>
+                <span id="btnUpdateCurrentProfilePic" class="c_primary-button bold pointer blue">사진 업로드</span>
             </div>
             <div class="_modal_item">
                 <span id="btnDelCurrentProfilePic"class="c_error-or-destructive bold pointer red">현재 사진 삭제</span>
@@ -61,4 +61,7 @@
             </div>
         </div>
     </div>
+    <form id="changeProfileForm">
+      <input type="file" accept="image/*" name="img" id="inputChangeProfile">
+    </form>
 </div>

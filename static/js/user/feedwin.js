@@ -35,6 +35,7 @@ function getFeedList() {
 (function () {
   const lData = document.querySelector('#lData');
   const btnFollow = document.querySelector('#btnFollow');
+  const btnUpdateCurrentProfilePic = document.querySelector('#btnUpdateCurrentProfilePic');
   const btnDelCurrentProfilePic = document.querySelector('#btnDelCurrentProfilePic');
   const btnProfileImgModalClose = document.querySelector('#btnProfileImgModalClose');
 
@@ -104,6 +105,34 @@ function getFeedList() {
           }
           btnProfileImgModalClose.click();
         });
+    });
+  }
+  if (btnUpdateCurrentProfilePic) {
+    btnUpdateCurrentProfilePic.addEventListener('click', (e) => {
+      const inputChangeProfile = document.querySelector('#inputChangeProfile');
+      const profileImgList = document.querySelectorAll('.profileimg');
+
+      inputChangeProfile.click();
+      inputChangeProfile.addEventListener('change', (e) => {
+        const imgSource = e.target.files[0];
+        const reader = new FileReader();
+        reader.readAsDataURL(imgSource);
+        reader.onload = function () {
+          profileImgList.forEach((profileImg) => {
+            profileImg.src = reader.result;
+          });
+        };
+        const fData = new FormData();
+        fData.append('img', imgSource);
+        fetch('/user/profile', {
+          method: 'POST',
+          body: fData,
+        })
+          .then((res) => res.json())
+          .then((res) => {
+            btnProfileImgModalClose.click();
+          });
+      });
     });
   }
 })();

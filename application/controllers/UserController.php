@@ -122,6 +122,27 @@ class UserController extends Controller {
             }
           }
           return [_RESULT => 0];
+        
+        case _POST:
+          $filenm = $_FILES["img"]["name"];
+          if(!is_array($_FILES)) {
+            return [_RESULT => 0];
+          }
+          $loginUser = getLoginUser();
+          $param = [ "iuser" => $loginUser->iuser ];
+          $saveDirectory = _IMG_PATH . "/profile/{$loginUser->iuser}";
+          if(!is_dir($saveDirectory)) {
+              mkdir($saveDirectory, 0777, true);
+          }
+          $tempName = $_FILES['img']["tmp_name"];
+          $randomFileNm = getRandomFileNm($filenm);
+          if(move_uploaded_file($tempName, $saveDirectory . "/" . $randomFileNm)) {
+              $param["mainimg"] = $randomFileNm;
+              $this->model->updUser($param);
+              $loginUser->mainimg = $randomFileNm;
+              return [_RESULT => 1];
+          }
+          return [_RESULT => 0];
       }
   }
 }
