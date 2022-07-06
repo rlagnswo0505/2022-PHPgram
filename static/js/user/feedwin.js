@@ -1,10 +1,18 @@
 const url = new URL(location.href);
+
+if (feedObj) {
+  const url = new URL(location.href);
+  feedObj.iuser = parseInt(url.searchParams.get('iuser'));
+  feedObj.getFeedUrl = '/user/feed';
+  feedObj.getFeedList();
+}
+
+/*
 function getFeedList() {
   if (!feedObj) {
     return;
   }
   const urlParams = url.searchParams;
-
   feedObj.showLoading();
   // const iuser = location.search.split('?iuser=');
   const param = {
@@ -21,6 +29,7 @@ function getFeedList() {
       feedObj.hideLoading();
     });
 }
+ */
 getFeedList();
 
 (function () {
@@ -44,6 +53,7 @@ getFeedList();
             .then((res) => {
               if (res.result) {
                 btnFollow.dataset.follow = '0';
+                // 팔로워 숫자 변경
                 const followerCnt = ~~spanFollower.innerText - 1;
                 spanFollower.innerText = followerCnt;
                 btnFollow.classList.remove('btn-outline-secondary');
@@ -65,6 +75,7 @@ getFeedList();
             .then((res) => {
               if (res.result) {
                 btnFollow.dataset.follow = '1';
+                // 팔로워 숫자 변경
                 const followerCnt = ~~spanFollower.innerText + 1;
                 spanFollower.innerText = followerCnt;
                 btnFollow.classList.remove('btn-primary');

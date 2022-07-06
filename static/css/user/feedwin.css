@@ -13,14 +13,16 @@
   justify-content: center;
   align-items: center;
 }
-.modal-body:not(:last-child) {
+._modal_item {
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+._modal_item:not(:last-child) {
   border-bottom: 1px solid #dee2e6;
 }
-.modal-body > p {
+._modal_item > p {
   display: flex;
   justify-content: center;
   align-items: center;

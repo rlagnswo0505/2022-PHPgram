@@ -3,6 +3,25 @@ const feedObj = {
   itemLength: 0,
   currentPage: 1,
   swiper: null,
+  getFeedUrl: '',
+  iuser: 0,
+  getFeedList: function () {
+    this.showLoading();
+    const param = {
+      page: this.currentPage++,
+      iuser: this.iuser,
+    };
+    fetch(this.getFeedUrl + encodeQueryString(param))
+      .then((res) => res.json())
+      .then((list) => {
+        this.makeFeedList(list);
+      })
+      .catch((e) => {
+        console.error(e);
+        this.hideLoading();
+      });
+  },
+
   refreshSwipe: function () {
     if (this.swiper !== null) {
       this.swiper = null;
@@ -112,8 +131,25 @@ const feedObj = {
 
       const img = document.createElement('img');
       divSwiperSlide.appendChild(img);
-      img.className = 'w100p_mw614';
+      img.className = 'w100p_mw614 pointer';
       img.src = `/static/img/feed/${item.ifeed}/${imgObj.img}`;
+      // 이미지 클릭시 이미지 보이기
+      img.addEventListener('click', () => {
+        const imgBox = document.createElement('div');
+        imgBox.classList = 'modal modal-img d-flex pointer imgBox';
+        imgBox.tabIndex = '2';
+        imgBox.innerHTML = `
+  <div class="modal-dialog">
+    <div class="modal-content img-modal-content">
+      <img src="${img.src}">
+    </div>
+  </div>`;
+        const main = document.querySelector('main');
+        main.appendChild(imgBox);
+        imgBox.addEventListener('click', () => {
+          imgBox.remove();
+        });
+      });
     });
 
     const divBtns = document.createElement('div');
