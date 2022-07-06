@@ -35,10 +35,13 @@ class UserController extends Controller {
                 $pw = $_POST["pw"];
                 $hashedPw = password_hash($pw, PASSWORD_BCRYPT);
                 $nm = $_POST["nm"];
+                $ip_addr = $_SERVER["REMOTE_ADDR"];
+                // $ip_addr = getRealClientIp();
                 $param = [
                     "email" => $email,
                     "pw" => $hashedPw,
-                    "nm" => $nm
+                    "nm" => $nm,
+                    "ip_addr" => $ip_addr
                 ];
 
                 $this->model->insUser($param);
@@ -87,39 +90,38 @@ class UserController extends Controller {
     }
 
     public function follow() {    
-         
-        $param = [
-            "fromiuser" => getIuser()
-        ];
+      $param = [
+        "fromiuser" => getIuser()
+      ];
 
-        switch(getMethod()) {
-            case _POST:                                
-                $json = getJson();
-                $param["toiuser"] = $json["toiuser"];
-                return [_RESULT => $this->model->insUserFollow($param)];
-            case _DELETE:        
-                $param["toiuser"] = $_GET["toiuser"];
-                return [_RESULT => $this->model->delUserFollow($param)];
-        }
+      switch(getMethod()) {
+        case _POST:                                
+          $json = getJson();
+          $param["toiuser"] = $json["toiuser"];
+          return [_RESULT => $this->model->insUserFollow($param)];
+        case _DELETE:        
+          $param["toiuser"] = $_GET["toiuser"];
+          return [_RESULT => $this->model->delUserFollow($param)];
+      }
     }
     public function profile() {
       switch(getMethod()) {
-          case _DELETE:
-              $loginUser = getLoginUser();
-              if($loginUser) {
-                  $path = "static/img/profile/{$loginUser->iuser}/{$loginUser->mainimg}";
-                  if(file_exists($path) && unlink($path)) {
-                      $param = [
-                          "iuser" => $loginUser->iuser,
-                          "delMainImg" => 1
-                      ];
-                      if($this->model->updUser($param)) {
-                          $loginUser->mainimg = null;
-                          return [_RESULT => 1];
-                      }
-                  }
+        case _DELETE:
+          $loginUser = getLoginUser();
+          if($loginUser && $loginUser->mainimg !== null) {
+            $path = "static/img/profile/{$loginUser->iuser}/{$loginUser->mainimg}";
+            if(file_exists($path) && unlink($path)) {
+              $param = [
+                "iuser" => $loginUser->iuser,
+                "delMainImg" => 1
+              ];
+              if($this->model->updUser($param)) {
+                $loginUser->mainimg = null;
+                return [_RESULT => 1];
               }
-              return [_RESULT => 0];
+            }
+          }
+          return [_RESULT => 0];
       }
   }
 }

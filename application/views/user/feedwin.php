@@ -5,14 +5,14 @@
         <div class="d-flex flex-row">            
             <div class="d-flex flex-column justify-content-center me-3">                
                 <div class="circleimg h150 w150 pointer feedwin">                    
-                    <img data-bs-toggle="modal" data-bs-target="#changeProfileImgModal" src='/static/img/profile/<?=$this->data->iuser?>/<?=$this->data->mainimg?>' onerror='this.error=null;this.src="/static/img/profile/defaultProfileImg_100.png"'>
+                    <img class="profileimg" data-bs-toggle="modal" data-bs-target="#changeProfileImgModal" src='/static/img/profile/<?=$this->data->iuser?>/<?=$this->data->mainimg?>' onerror='this.error=null;this.src="/static/img/profile/defaultProfileImg_100.png"'>
                 </div>
             </div>            
             <div class="flex-grow-1 d-flex flex-column justify-content-evenly">
                 <div><?=$this->data->email?>
                     <?php
                         if($this->data->iuser === getIuser()) {
-                            echo '<button type="button" id="btnModProfile" class="btn btn-outline-secondary">프로필 수정</button>';
+                            echo '<button type="button" id="btnModProfile" class="btn btn-outline-secondary">프로필 편집</button>';
                         } else {                            
                             $data_follow = 0;
                             $cls = "btn-primary";
@@ -57,7 +57,7 @@
                 <span id="btnDelCurrentProfilePic"class="c_error-or-destructive bold pointer red">현재 사진 삭제</span>
             </div>
             <div class="_modal_item">
-                <span class="pointer" data-bs-dismiss="modal">취소</span>
+                <span class="pointer" id="btnProfileImgModalClose" data-bs-dismiss="modal">취소</span>
             </div>
         </div>
     </div>

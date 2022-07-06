@@ -36,6 +36,8 @@ function getFeedList() {
   const lData = document.querySelector('#lData');
   const btnFollow = document.querySelector('#btnFollow');
   const btnDelCurrentProfilePic = document.querySelector('#btnDelCurrentProfilePic');
+  const btnProfileImgModalClose = document.querySelector('#btnProfileImgModalClose');
+
   if (btnFollow) {
     btnFollow.addEventListener('click', function () {
       const param = {
@@ -89,9 +91,19 @@ function getFeedList() {
   }
   if (btnDelCurrentProfilePic) {
     btnDelCurrentProfilePic.addEventListener('click', (e) => {
-      fetch('')
+      fetch('/user/profile', {
+        method: 'DELETE',
+      })
         .then((res) => res.json())
-        .then((res) => console.log(res));
+        .then((res) => {
+          if (res.result) {
+            const profileImgList = document.querySelectorAll('.profileimg');
+            profileImgList.foreach((item) => {
+              item.src = 'static/img/profile/defaultProfileImg_100.png';
+            });
+          }
+          btnProfileImgModalClose.click();
+        });
     });
   }
 })();
