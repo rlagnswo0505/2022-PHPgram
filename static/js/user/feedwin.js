@@ -30,7 +30,7 @@ function getFeedList() {
     });
 }
  */
-getFeedList();
+// getFeedList();
 
 (function () {
   const lData = document.querySelector('#lData');
