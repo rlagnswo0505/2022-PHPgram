@@ -113,7 +113,7 @@ const feedObj = {
     const regDtInfo = getDateTimeInfo(item.regdt);
     divTop.className = 'd-flex flex-row ps-3 pe-3 border-bottom';
     const writerImg = `<img class="profileimg" src='/static/img/profile/${item.iuser}/${item.mainimg}' 
-          onerror='this.error=null;this.src="/static/img/profile/defaultProfileImg_100.png"'>`;
+    onerror='this.error=null;this.src="/static/img/profile/defaultProfileImg_100.png"'>`;
 
     divTop.innerHTML = `
           <div class="d-flex flex-column justify-content-center">
@@ -161,11 +161,11 @@ const feedObj = {
         imgBox.classList = 'modal modal-img d-flex pointer imgBox';
         imgBox.tabIndex = '2';
         imgBox.innerHTML = `
-  <div class="modal-dialog">
-    <div class="modal-content img-modal-content">
-      <img src="${img.src}">
-    </div>
-  </div>`;
+          <div class="modal-dialog">
+            <div class="modal-content img-modal-content">
+              <img src="${img.src}">
+            </div>
+          </div>`;
         const main = document.querySelector('main');
         main.appendChild(imgBox);
         imgBox.addEventListener('click', () => {

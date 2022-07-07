@@ -23,16 +23,10 @@ main {
   justify-content: center;
   align-items: center;
 }
-.regdt {
-  margin: 10px;
-  font-size: 0.8rem;
-  color: #a8a8a8;
-}
 .img-modal-content {
   background-color: rgba(0, 0, 0, 0.87);
   animation: slide-top 0.5s ease-in-out both;
 }
-
 @keyframes slide-top {
   0% {
     transform: translateY(100px);
@@ -42,4 +36,9 @@ main {
     transform: translateY(0);
     opacity: 1;
   }
+}
+.regdt {
+  margin: 10px;
+  font-size: 0.8rem;
+  color: #a8a8a8;
 }

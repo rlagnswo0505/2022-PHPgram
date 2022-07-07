@@ -99,8 +99,8 @@ function getFeedList() {
         .then((res) => {
           if (res.result) {
             const profileImgList = document.querySelectorAll('.profileimg');
-            profileImgList.foreach((item) => {
-              item.src = 'static/img/profile/defaultProfileImg_100.png';
+            profileImgList.forEach((item) => {
+              item.src = '/static/img/profile/defaultProfileImg_100.png';
             });
           }
           btnProfileImgModalClose.click();

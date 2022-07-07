@@ -76,7 +76,7 @@ class UserController extends Controller {
             $param = [
                 "startIdx" => $startIdx,
                 "toiuser" => $_GET["iuser"],
-                "loginiuser" => getIuser()
+                "loginiuser" => getIuser(),
             ];        
             $list = $this->model->selFeedList($param);
             foreach($list as $item) {  
@@ -133,8 +133,9 @@ class UserController extends Controller {
 
           if($loginUser && $loginUser->mainimg !== null) {
             $path = "static/img/profile/{$loginUser->iuser}/{$loginUser->mainimg}";
-            file_exists($path);
+            if(file_exists($path)){
             unlink($path);
+            }
           }
           $saveDirectory = _IMG_PATH . "/profile/{$loginUser->iuser}";
           if(!is_dir($saveDirectory)) {
