@@ -122,7 +122,7 @@ class UserController extends Controller {
             }
           }
           return [_RESULT => 0];
-        
+        // 프로필 수정
         case _POST:
           $filenm = $_FILES["img"]["name"];
           if(!is_array($_FILES)) {
@@ -130,12 +130,19 @@ class UserController extends Controller {
           }
           $loginUser = getLoginUser();
           $param = [ "iuser" => $loginUser->iuser ];
+
+          if($loginUser && $loginUser->mainimg !== null) {
+            $path = "static/img/profile/{$loginUser->iuser}/{$loginUser->mainimg}";
+            file_exists($path);
+            unlink($path);
+          }
           $saveDirectory = _IMG_PATH . "/profile/{$loginUser->iuser}";
           if(!is_dir($saveDirectory)) {
               mkdir($saveDirectory, 0777, true);
           }
           $tempName = $_FILES['img']["tmp_name"];
           $randomFileNm = getRandomFileNm($filenm);
+
           if(move_uploaded_file($tempName, $saveDirectory . "/" . $randomFileNm)) {
               $param["mainimg"] = $randomFileNm;
               $this->model->updUser($param);

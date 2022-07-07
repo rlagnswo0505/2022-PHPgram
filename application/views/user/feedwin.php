@@ -9,7 +9,10 @@
                 </div>
             </div>            
             <div class="flex-grow-1 d-flex flex-column justify-content-evenly">
-                <div><?=$this->data->email?>
+                <div class="d-flex align-items-center flex-row">
+                  <div class="feedUserEmail">
+                  <?=$this->data->email?>
+                  </div>
                     <?php
                         if($this->data->iuser === getIuser()) {
                             echo '<button type="button" id="btnModProfile" class="btn btn-outline-secondary">프로필 편집</button>';
@@ -61,7 +64,7 @@
             </div>
         </div>
     </div>
-    <form id="changeProfileForm">
+    <form id="changeProfileForm" class="d-none">
       <input type="file" accept="image/*" name="img" id="inputChangeProfile">
     </form>
 </div>
