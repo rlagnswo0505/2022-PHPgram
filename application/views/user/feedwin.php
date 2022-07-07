@@ -5,7 +5,7 @@
         <div class="d-flex flex-row">            
             <div class="d-flex flex-column ps-3 pe-3 justify-content-center me-3">                
                 <div class="circleimg h150 w150 pointer feedwin">                    
-                    <img class="profileimg" data-bs-toggle="modal" data-bs-target="#changeProfileImgModal" src='/static/img/profile/<?=$this->data->iuser?>/<?=$this->data->mainimg?>' onerror='this.error=null;this.src="/static/img/profile/defaultProfileImg_100.png"'>
+                    <img class="profileimg userProfileimg" data-bs-toggle="modal" data-bs-target="#changeProfileImgModal" src='/static/img/profile/<?=$this->data->iuser?>/<?=$this->data->mainimg?>' onerror='this.error=null;this.src="/static/img/profile/defaultProfileImg_100.png"'>
                 </div>
             </div>            
             <div class="flex-grow-1 d-flex flex-column justify-content-evenly">
