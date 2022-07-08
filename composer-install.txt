@@ -1,0 +1,19 @@
+<composer 설치>
+
+https://getcomposer.org/download/
+
+- php.ini 
+zend_extension=xdebug - 주석(;) 달기 
+extention=openssl - 주석 해제 후 설치
+
+- cmd
+cmd로 해당 프로젝트 폴더에 들어간 후
+composer require cboden/ratchet 로 설치
+
+- composer.json에 추가
+"autoload": {
+  "psr-4":{
+    "ws\\": "ws/",
+    "application\\": "application/"
+  }
+}

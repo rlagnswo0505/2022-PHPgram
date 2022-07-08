@@ -90,7 +90,6 @@ function getFeedList() {
       }
     });
   }
-  const userProfileimg = document.querySelector('.userProfileimg');
 
   if (btnDelCurrentProfilePic) {
     btnDelCurrentProfilePic.addEventListener('click', (e) => {
@@ -106,13 +105,37 @@ function getFeedList() {
             });
           }
           btnProfileImgModalClose.click();
-          userProfileimg.setAttribute('data-bs-target', '123');
         });
     });
   }
 
   if (btnUpdateCurrentProfilePic) {
-    btnUpdateCurrentProfilePic.addEventListener('click', changeProfile);
+    btnUpdateCurrentProfilePic.addEventListener('click', (e) => {
+      const inputChangeProfile = document.querySelector('#inputChangeProfile');
+      const profileImgList = document.querySelectorAll('.profileimg');
+
+      inputChangeProfile.click();
+      inputChangeProfile.addEventListener('change', (e) => {
+        const imgSource = e.target.files[0];
+        const reader = new FileReader();
+        reader.readAsDataURL(imgSource);
+        reader.onload = function () {
+          profileImgList.forEach((profileImg) => {
+            profileImg.src = reader.result;
+          });
+        };
+        const fData = new FormData();
+        fData.append('img', imgSource);
+        fetch('/user/profile', {
+          method: 'POST',
+          body: fData,
+        })
+          .then((res) => res.json())
+          .then((res) => {
+            btnProfileImgModalClose.click();
+          });
+      });
+    });
   }
 
   // if (userProfileimg.src === `http://localhost/static/img/profile/${feedObj.iuser}/` || userProfileimg.src === 'http://localhost/static/img/profile/defaultProfileImg_100.png') {
@@ -123,32 +146,32 @@ function getFeedList() {
   //   });
   // }
 
-  function changeProfile() {
-    const inputChangeProfile = document.querySelector('#inputChangeProfile');
-    const profileImgList = document.querySelectorAll('.profileimg');
+  // function changeProfile() {
+  //   const inputChangeProfile = document.querySelector('#inputChangeProfile');
+  //   const profileImgList = document.querySelectorAll('.profileimg');
 
-    inputChangeProfile.click();
-    inputChangeProfile.addEventListener('change', (e) => {
-      const imgSource = e.target.files[0];
-      const reader = new FileReader();
-      reader.readAsDataURL(imgSource);
-      reader.onload = function () {
-        profileImgList.forEach((profileImg) => {
-          profileImg.src = reader.result;
-        });
-      };
-      const fData = new FormData();
-      fData.append('img', imgSource);
-      fetch('/user/profile', {
-        method: 'POST',
-        body: fData,
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          btnProfileImgModalClose.click();
-        });
-    });
-  }
+  //   inputChangeProfile.click();
+  //   inputChangeProfile.addEventListener('change', (e) => {
+  //     const imgSource = e.target.files[0];
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(imgSource);
+  //     reader.onload = function () {
+  //       profileImgList.forEach((profileImg) => {
+  //         profileImg.src = reader.result;
+  //       });
+  //     };
+  //     const fData = new FormData();
+  //     fData.append('img', imgSource);
+  //     fetch('/user/profile', {
+  //       method: 'POST',
+  //       body: fData,
+  //     })
+  //       .then((res) => res.json())
+  //       .then((res) => {
+  //         btnProfileImgModalClose.click();
+  //       });
+  //   });
+  // }
 })();
 
 // (function () {
