@@ -33,13 +33,12 @@
         makeDmUserList(res);
       });
   }
-
+  getDmUserList();
   function makeDmUserList(userList) {
     let isNonExistent = true;
     userList.forEach(function (item) {
       const div = makeDmUserItem(item);
       dmUserListContainerElem.append(div);
-
       if (oppoiuser === item.opponent.iuser) {
         isNonExistent = false;
         getDmMsgList(item.idm);
@@ -64,7 +63,7 @@
   }
   function makeDmUserItem(item) {
     const div = document.createElement('div');
-    div.className = 'pointer d-flex flex-row w-full';
+    div.className = 'pointer d-flex flex-row w-full dmProfile';
     div.innerHTML = `
           <div class="w100">
               <img src="/static/img/profile/${item.opponent.iuser}/${item.opponent.mainimg}" class="profile w30 h30" 
@@ -83,10 +82,16 @@
       getDmMsgList(item.idm);
       setIdm(item.idm);
       oppoiuser = item.opponent.iuser;
+      const dmProfiles = dmUserListContainerElem.querySelectorAll('.dmProfile');
+      dmProfiles.forEach((dmProfile) => {
+        if (dmProfile.classList.contains('select')) {
+          dmProfile.classList.remove('select');
+        }
+        div.classList.add('select');
+      });
     });
     return div;
   }
-  getDmUserList();
 
   dmMsgContainerElem.addEventListener('scroll', (e) => {
     if (e.target.scrollTop === 0) {
@@ -171,7 +176,5 @@ function makeDmMsgItem(loginiuser, item) {
           <b>${item.msg}</b>
       </div>
   `;
-  // const alertWarning = document.querySelectorAll('.alert-warning');
-  // const alertSecondary = document.querySelectorAll('.alert-secondary');
   return div;
 }
