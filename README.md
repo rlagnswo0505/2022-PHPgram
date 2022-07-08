@@ -5,17 +5,17 @@
 - extention=openssl - 주석 해제 후 설치
 
 
-# ratchet 라이브러리 설치
+# [ratchet 라이브러리 설치]
 - cmd로 해당 프로젝트 폴더에 들어간 후
 - composer require cboden/ratchet 로 설치
 
-# composer.json, autoload 적용
+# [composer.json, autoload 적용]
 - vscode terminal 
 - composer dump-autoload 입력 후 설치
 
 
-# 웹소켓 서버 실행 (CLI에서)
-  php socketRun.php
+# [웹소켓 서버 실행 (CLI에서)]
+- php socketRun.php
 
 # [vscode 파일 추가]
 - composer.json에 추가
