@@ -28,7 +28,7 @@
 
 - ws 폴더 만든 후 
 https://github.com/sbsteacher/PHPgram/tree/master/ws 
-- 파일 만들어서 내용 붙여넣기
+파일 만들어서 내용 붙여넣기
 
 - 최상위 폴더에 soketRun.php 추가
 https://github.com/sbsteacher/PHPgram/blob/master/socketRun.php
@@ -36,3 +36,7 @@ https://github.com/sbsteacher/PHPgram/blob/master/socketRun.php
 - controllers 폴더에
 DmController.php 만들고 내용 추가
 https://github.com/sbsteacher/PHPgram/blob/master/application/controllers/DmController.php
+
+- modes 폴더에
+DmModel.php 만들고 내용 추가
+https://github.com/sbsteacher/PHPgram/blob/master/application/models/DmModel.php
